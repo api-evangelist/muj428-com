@@ -1,0 +1,7 @@
+{
+  "protocol": "muj428-trust-kernel-pointer",
+  "version": "1.0",
+  "canonical": "https://agents.muj428.com/trust-kernel.json",
+  "human_readable": "https://agents.muj428.com/trust-kernel.md",
+  "sha256": "68b0418841d58d3e977105a5d923d3ebec741aa4d83292d8a1276a7b86d01cee"
+}

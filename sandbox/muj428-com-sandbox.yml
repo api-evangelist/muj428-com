@@ -1,0 +1,64 @@
+generated: '2026-09-19'
+method: searched
+source: https://agents.muj428.com/integration-sandbox.json
+docs:
+- https://agents.muj428.com/verified-effect-challenge.md
+- https://agents.muj428.com/docs/external-verified-effect-challenge.md
+- https://agents.muj428.com/docs/DECISION-DELTA-TEST.md
+- https://agents.muj428.com/index.md
+summary: >-
+  MUJ428 publishes no test-mode keys (it has no keys at all) and no fake cards or wallets; what it publishes is
+  three zero-money ways to exercise the surface, all documented and all confirmed live on 2026-09-19. (1) The FREE
+  PREFLIGHT itself: the first 1,000 qualifying Trust Reflex decisions per stable caller_ref cost $0.00 with no
+  card, wallet, contract or signup, return a real decision and Trust Receipt with payment_required=false and
+  execution_authority=false, and move nothing. (2) The External Verified Effect Conformance Sandbox
+  (TESTNET_CONFORMANCE): a two-step authorize -> execute flow on agents.muj428.com that lets an external runtime
+  prove it can obtain, carry and consume an authenticated action-bound receipt and receive a COMMITTED Verified
+  Effect, then have a replay denied — forbidden effects payment, fund_transfer, wallet_signing, external_write;
+  moves_money false. (3) DECISION-DELTA-TEST, a shadow-only comparison guide ("preview_by_default true, automatic
+  payment false"). Planning-only calls (POST /v1/payments/select, MCP select_assurance_tier) quote or check without
+  charging. Verbatim contract: sandbox/muj428-com-integration-sandbox.json.
+modes:
+  free_preflight:
+    environment: production
+    endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust
+    credential: none
+    cost: $0.00 for the first 1,000 qualifying decisions per caller_ref; replays of the same action_ref do not count
+    side_effects: none on the caller's world; a decision record and free-quota accounting on MUJ428's side
+    assurance_level: FREE_PREFLIGHT
+    example_request: '{"caller_ref":"your-stable-agent-id","action_ref":"first-preflight","action":"PAY"}'
+    expected: 'HTTP 200 · decision · Trust Receipt v1.3 · payment_required=false'
+    source: https://agents.muj428.com/index.md
+  integration_sandbox:
+    environment: TESTNET_CONFORMANCE
+    authorize: {method: POST, url: 'https://agents.muj428.com/v1/integration-sandbox/authorize', input: [action_ref, external_caller_ref, payload]}
+    execute: {method: POST, url: 'https://agents.muj428.com/v1/integration-sandbox/execute', input: [receipt, current, payload]}
+    target: muj428://integration-sandbox/echo
+    executor: MUJ428 Integration Sandbox Executor
+    assurance_level: SANDBOX_CONFORMANCE
+    execution_authority: SANDBOX_ONLY
+    production_authority: false
+    forbidden_effects: [payment, fund_transfer, wallet_signing, external_write]
+    moves_money: false
+    replay_check: A second execute with the same receipt must return replay_denied true with NONCE_ALREADY_CONSUMED or EFFECT_ALREADY_COMMITTED.
+    runnable_example: https://agents.muj428.com/examples/external-verified-effect.mjs
+    run: 'curl -fsS https://agents.muj428.com/examples/external-verified-effect.mjs -o external-verified-effect.mjs && node external-verified-effect.mjs'
+    output: machine-readable stdout with fixture_sha256, receipt_digest, the committed verified_effect and a replay_proof
+    source: https://agents.muj428.com/integration-sandbox.json; https://agents.muj428.com/verified-effect-challenge.md
+  decision_delta_test:
+    mode: shadow_only
+    preview_by_default: true
+    automatic_payment: false
+    guide: https://agents.muj428.com/docs/DECISION-DELTA-TEST.md
+    example: https://agents.muj428.com/examples/compare-trust-preflight.mjs
+    note: Operator adjudication is required; disagreement alone does not prove incremental value (developer.json incremental_value_evaluation).
+  planning_only_calls:
+  - {operation: selectPaymentPlan, what: 'checks whether a rail/mode is eligible; success is not payment authorization'}
+  - {operation: 'MCP select_assurance_tier', what: 'computes the exact Transaction Assurance fee; does not move money'}
+  - {operation: 'MCP invoke_trust_service without payment_signature', what: 'returns the exact x402 challenge without charging'}
+  mpp_test_endpoint:
+    url: https://agents.muj428.com/v1/mpp/test
+    note: Named in /v1/mpp/status (ready_for_test false, ready_for_live true at probe time); not exercised by this pass.
+test_credentials: none published — the surface has no API keys, and the sandbox requires no wallet, signature or credential
+test_values: none published — no test cards, accounts or tokens exist; do not invent any
+time_simulation: none

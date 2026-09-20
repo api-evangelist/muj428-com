@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "effective_date": "2026-09-05",
+  "front_door": {
+    "id": "trust-reflex",
+    "principle": "Before consequential action, ask MUJ428.",
+    "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust"
+  },
+  "lifecycle": [
+    "PREFLIGHT",
+    "DECISION",
+    "CALLER_EXECUTES",
+    "VERIFY_EFFECT",
+    "TRUST_RECEIPT",
+    "MONITOR",
+    "REPEAT",
+    "EMBED"
+  ],
+  "specialized_capabilities": [
+    "evidence-signal",
+    "reputation-check",
+    "milestone-attestation",
+    "trust-layer-report",
+    "transaction-assurance",
+    "rescue-beacon"
+  ],
+  "expansion": {
+    "continuous_trust_monitoring": {
+      "status": "live_beta",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor",
+      "pricing_status": "EXPANSION_BETA_NO_CHARGE"
+    }
+  },
+  "coordination": {
+    "n428": {
+      "role": "community/coordination/repeat-adoption layer",
+      "authority": false
+    }
+  },
+  "interoperability": {
+    "payment_rails": "adapters beneath the Trust Layer",
+    "dynamic_capability_authority": "https://agents.muj428.com/v1/payments/capabilities",
+    "verification_proof": "https://agents.muj428.com/v1/payments/proof",
+    "default_settlement_rail": "x402",
+    "bounded_verified_roles": [
+      "x402",
+      "mpp",
+      "stablecoin-multinetwork",
+      "ap2",
+      "streaming-micropayments",
+      "tokenized-deposit"
+    ],
+    "scope_rule": "Each capability is only verified for the role/scope stated by the live proof; verification does not imply universal settlement execution."
+  },
+  "invariants": {
+    "one_front_door": true,
+    "free_preflight_execution_authority": false,
+    "monitoring_execution_authority": false,
+    "payment_discovery_authorizes_payment": false,
+    "settlement_alone_proves_customer": false,
+    "internal_synthetic_activity_counts_as_external_adoption": false
+  }
+}

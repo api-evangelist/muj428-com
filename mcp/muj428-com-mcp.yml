@@ -1,0 +1,116 @@
+generated: '2026-09-19'
+method: probed
+status: published
+source: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp
+docs: https://agents.muj428.com/AGENTS.md
+discovery:
+  server_json: https://agents.muj428.com/.well-known/mcp.json
+  server_card: https://agents.muj428.com/mcp/server-card
+  legacy_server_card: https://agents.muj428.com/.well-known/mcp/server-card.json
+  official_registry: https://registry.modelcontextprotocol.io/v0/servers?search=muj428
+  registry_name: io.github.wmujahid428-web/muj428-trust-layer
+summary: >-
+  MUJ428 operates TWO remote MCP servers, both Streamable HTTP, both answering initialize and tools/list
+  anonymously. The CANONICAL one is a Supabase edge function at
+  https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp (protocol 2025-06-18, serverInfo
+  "MUJ428 Trust Layer — VERIFY BEFORE ACT" 1.8.3, 14 tools with JSON Schema 2020-12 inputSchemas;
+  resources/list and prompts/list return -32601; a GET returns 406). A second, OLDER compatibility facade
+  answers at https://agents.muj428.com/mcp (serverInfo "MUJ428 Trust Layer" 1.7.1, 2 tools, GET returns
+  405) — it is the remote URL the official MCP registry entry lists (versions 1.0.0 and 1.6.2 published
+  2026-08-10), while the provider's own /mcp/server-card marks it compatibilityFacade canonical: false.
+  Authorship is provider: the tool names (trust_action, rescue_agent_before_consequence,
+  publish_trust_request, select_assurance_tier) are MUJ428-specific and match no shared platform
+  fingerprint; the server card's repository points at github.com/wmujahid428-web/muj428-a2a-revenue-engine,
+  which returns 404 (private or removed — the user page shows no public repositories).
+deployment:
+  mode: remote
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp
+  auth: none
+  verified: probed
+  note: >-
+    A hosted HTTPS endpoint an MCP client POSTs to directly; MUJ428 ships no stdio package and AGENTS.md
+    says "No package is required for the canonical REST or MCP production surfaces." auth is "none" in
+    the connection sense — initialize and tools/list need no credential, and no OAuth metadata is served
+    on any host (/.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource 404 on
+    agents.muj428.com and on the Supabase project root). Paid tools (invoke_trust_service for the five
+    x402 services, trust_action after the free quota) are gated by x402 PAYMENT — the tool returns the
+    exact 402 challenge and accepts a caller-supplied payment_signature — which is an economic gate on
+    invocation, not an authentication scheme. The compatibility facade at https://agents.muj428.com/mcp
+    is a second remote endpoint, recorded below; deployment.endpoint names the one the provider calls
+    canonical.
+servers:
+- id: canonical
+  name: MUJ428 Trust Layer — VERIFY BEFORE ACT
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp
+  transport: streamable-http
+  http_methods: [POST]
+  auth: none
+  payment: x402 (USDC on Base, eip155:8453) for paid services; Trust Reflex free for the first 1,000 qualifying decisions per caller_ref
+  status: live
+  canonical: true
+  probe:
+    fetched: '2026-09-19'
+    initialize:
+      http_status: 200
+      protocol_version: '2025-06-18'
+      server_info: {name: 'MUJ428 Trust Layer — VERIFY BEFORE ACT', version: 1.8.3}
+      capabilities: {tools: {listChanged: true}}
+    tools_list:
+      http_status: 200
+      content_type: application/json
+      tool_count: 14
+      file: mcp/muj428-com-mcp-tools.json
+    resources_list: {http_status: 200, error: '-32601 Method not found'}
+    prompts_list: {http_status: 200, error: '-32601 Method not found'}
+    get_request: {http_status: 406, content_type: application/json}
+  authorship: provider
+  tools:
+  - {name: rescue_agent_before_consequence, category: rescue, required: [caller_ref, action_ref, objective, uncertainty], rest: rescueAgentBeforeConsequence, description: Agent Rescue Beacon — bounded evidence guidance and the independent Trust Kernel preflight route when an agent is stuck, uncertain, retrying with a changed effect, or given a peer-agent instruction. Never grants execution or payment authority.}
+  - {name: trust_action, category: preflight, required: [caller_ref, action_ref, action], rest: trustAction, description: The canonical Trust Reflex — preflight one consequential action (PAY, BUY, DELEGATE, TRUST, ACCEPT, APPROVE, WRITE, RELEASE, COMMIT, PROPOSE) and receive ALLOW / VERIFY / REQUIRE_VERIFICATION / DENY plus Trust Receipt v1.3. Free for the first 1,000 qualifying decisions per caller_ref, then the tool exposes the 0.01 USDC x402 challenge.}
+  - {name: invoke_trust_service, category: paid-services, required: [service, request], rest: 'evidenceSignal | reputationCheck | milestoneAttestation | trustLayerReport | transactionAssurance', description: Generic beginning-to-end bridge to the paid x402 services — call once without payment_signature to receive the exact x402 challenge, then again with the caller-authorized signature.}
+  - {name: get_service_catalog, category: discovery, required: [], rest: getServiceCatalog, description: Canonical service catalog with launch prices, endpoints, free quota and default x402 network.}
+  - {name: get_payment_rails, category: payments-discovery, required: [], rest: getPaymentPlans, description: Read-only payment-rail capabilities and their activation state; moves no funds.}
+  - {name: resolve_trust_route, category: routing, required: [], rest: resolveTrustRoute, description: Agent Router and Trust DNS — resolve whether an intended action requires a Trust Receipt v1.3 and which supported action to preflight with.}
+  - {name: get_trust_heartbeat, category: operations, required: [], rest: getTrustHeartbeat, description: Current policy epoch, accepted receipt version, revocation state and component endpoints.}
+  - {name: find_trust_capabilities, category: directory, required: [], rest: findTrustCapabilities, description: Search the compatibility directory for receipt-aware infrastructure by capability and protocol.}
+  - {name: publish_trust_request, category: directory, required: [requester_ref, description], rest: publishTrustRequest, description: Publish a bounded machine-readable request for a trust capability and receive current compatibility matches.}
+  - {name: observe_trust_compatibility, category: telemetry, required: [observer_ref, advertisement_hash], rest: observeTrustCompatibility, description: Record that an agent encountered a compatibility advertisement so propagation can be measured; discovery telemetry, not authorization.}
+  - {name: select_payment_rail, category: payments-discovery, required: [], rest: selectPaymentPlan, description: Planning-only preflight of a requested payment rail; never sends a payment.}
+  - {name: get_trust_layer_pricing, category: pricing, required: [], rest: getPricing, description: Canonical launch pricing (Airtable Commercial Pricing Authority mirror).}
+  - {name: select_assurance_tier, category: pricing, required: [transaction_value_usd], rest: null, description: Calculate the exact Transaction Assurance launch fee (2% / $9 min under $50,000; 1% / $25 min at or above) before payment; does not move money.}
+  - {name: get_capabilities, category: discovery, required: [], rest: discoverTrustLayer, description: Canonical machine discovery surfaces, payment-rail discovery, Trust Gravity routing and the recommended invocation flow.}
+- id: compatibility-facade
+  name: MUJ428 Trust Layer
+  endpoint: https://agents.muj428.com/mcp
+  transport: streamable-http
+  http_methods: [POST]
+  auth: none
+  status: live
+  canonical: false
+  note: >-
+    The older facade on the provider's product host. Its initialize response carries an
+    extensions.com.muj428/trust-reflex block describing trust_action and the instruction "Before PAY, BUY,
+    DELEGATE, TRUST, ACCEPT, APPROVE, WRITE, RELEASE, COMMIT, or PROPOSE, invoke trust_action." The
+    official MCP registry entry (io.github.wmujahid428-web/muj428-trust-layer, published 2026-08-10) lists
+    THIS URL as its remote, so registry-driven clients land here rather than on the canonical facade.
+  probe:
+    fetched: '2026-09-19'
+    initialize:
+      http_status: 200
+      protocol_version: '2025-06-18'
+      server_info: {name: MUJ428 Trust Layer, version: 1.7.1}
+      capabilities: {tools: {listChanged: false}}
+    tools_list:
+      http_status: 200
+      content_type: application/json
+      tool_count: 2
+      file: mcp/muj428-com-mcp-tools-facade.json
+    get_request: {http_status: 405, content_type: application/json}
+  authorship: provider
+  tools:
+  - {name: trust_action, category: preflight, required: [action], rest: trustAction, description: Same Trust Reflex tool; this facade's schema requires only action and accepts trajectory inputs (action_history, trajectory, previous_actions, previous_trust_receipts).}
+  - {name: get_evidence_signal_requirements, category: pricing, required: [], rest: getPricing, description: Evidence-check payment, network, endpoint and assurance-pricing requirements before an autonomous payment.}
+tool_count: 14
+listings:
+- Official MCP registry — io.github.wmujahid428-web/muj428-trust-layer (versions 1.0.0 and 1.6.2, published 2026-08-10, remote https://agents.muj428.com/mcp)
+- a2aregistry.org — "MUJ428 Trust Reflex" (the A2A listing that led here)

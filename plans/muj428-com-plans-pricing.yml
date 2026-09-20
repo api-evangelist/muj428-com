@@ -1,0 +1,80 @@
+generated: '2026-09-19'
+method: probed
+source: https://agents.muj428.com/pricing.json
+docs:
+- https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/pricing.json
+- https://agents.muj428.com/commercial-contract.json
+- https://agents.muj428.com/index.md
+plan_count: 7
+currency: USD/USDC
+model: metered per decision / per call in USDC on Base (eip155:8453) via x402; no subscription, no account, no card
+pricing_authority: Airtable Commercial Pricing Authority (schema 2.3.1), effective 2026-08-29, review 2026-10-20; automatic price increases false; launch pricing reviewed approximately every 60 days and never auto-increases
+summary: >-
+  Read from the provider's machine-readable pricing document (method probed) and cross-checked against the facade's
+  /pricing.json and commercial-contract.json, which agree on every number. MUJ428 publishes no tiers. Trust Reflex —
+  the front door — is free for the first 1,000 qualifying decisions per stable caller_ref (replays of the same
+  action_ref do not count) and 0.01 USDC per decision after that, only after explicit caller authorization; there is no
+  automatic paid continuation. Five specialised services are flat-priced or percentage-priced per call and settle
+  through x402 (HTTP 402 challenge, retry with PAYMENT-SIGNATURE). Continuous Trust Monitoring is in an expansion
+  beta at no charge. Copy of the source: plans/muj428-com-pricing-source.json.
+plans:
+- id: trust-reflex
+  name: Trust Reflex (preflight)
+  price: 0
+  currency: USD
+  period: per qualifying decision
+  included: 1,000 qualifying decisions per stable caller_ref, free
+  overage: 0.01 USD/USDC per qualifying production decision (10000 atomic USDC) after the quota, only after explicit caller authorization
+  limits: ['no card, wallet, contract, signup or API key required during the free allocation', 'replaying the same caller_ref/action_ref does not consume a decision', 'no automatic paid continuation', 'execution_authority=false on free-preflight receipts']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust
+  status: 'LIVE: free quota then x402'
+- id: evidence-signal
+  name: Evidence Signal
+  price: 0.25
+  currency: USDC
+  period: per call
+  overage: null
+  limits: ['x402 on eip155:8453; amount_atomic 250000; asset 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/evidence-signal
+  status: LIVE x402
+- id: reputation-check
+  name: Agent Reputation Check
+  price: 0.10
+  currency: USDC
+  period: per call
+  limits: ['x402; amount_atomic 100000']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/reputation-check
+  status: LIVE x402
+- id: milestone-attestation
+  name: Milestone Evidence Attestation
+  price: 0.25
+  currency: USDC
+  period: per call
+  limits: ['x402; amount_atomic 250000']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/milestone-attestation
+  status: LIVE x402
+- id: trust-layer-report
+  name: Trust Layer Report
+  price: 0.50
+  currency: USDC
+  period: per call
+  limits: ['x402; amount_atomic 500000']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-layer-report
+  status: LIVE x402
+- id: transaction-assurance
+  name: Transaction Assurance
+  price: '2% of declared transaction value, $9 minimum, under $50,000; 1%, $25 minimum, at or above $50,000'
+  currency: USD (settled in USDC via x402)
+  period: per transaction
+  limits: ['fee computed from transaction_value_usd; quote first with MCP select_assurance_tier']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/transaction-assurance
+  status: LIVE x402
+- id: continuous-trust-monitoring
+  name: Continuous Trust Monitoring
+  price: 0
+  currency: USD
+  period: per monitor
+  limits: ['EXPANSION_BETA_NO_CHARGE; created from a prior Trust Receipt; execution_authority false']
+  endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor
+  status: EXPANSION_BETA_LIVE
+contact: sales@muj428.com (from /.well-known/x402)

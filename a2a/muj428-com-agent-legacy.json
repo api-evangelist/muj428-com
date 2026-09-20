@@ -1,0 +1,159 @@
+{
+  "name": "MUJ428 Trust Reflex",
+  "description": "MUJ428 — VERIFY BEFORE ACT — machine-native preflight trust routing and paid trust services before consequential autonomous action.",
+  "version": "1.8.3",
+  "provider": {
+    "name": "MUJ428 LLC",
+    "url": "https://agents.muj428.com"
+  },
+  "campaign": "PROJECT OVERREACT-428",
+  "capabilities": [
+    "trust-action-routing",
+    "evidence-verification",
+    "reputation-signal",
+    "milestone-verification",
+    "transaction-assurance",
+    "payment-gated-fulfillment",
+    "trust-receipts",
+    "n428-coordination"
+  ],
+  "ai_action_vocabulary": [
+    "PAY",
+    "BUY",
+    "DELEGATE",
+    "TRUST",
+    "ACCEPT",
+    "APPROVE",
+    "WRITE",
+    "RELEASE",
+    "COMMIT",
+    "PROPOSE"
+  ],
+  "canonical_facade": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer",
+  "endpoints": {
+    "trust_action": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust",
+    "evidence_signal": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/evidence-signal",
+    "reputation_check": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/reputation-check",
+    "milestone_attestation": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/milestone-attestation",
+    "trust_layer_report": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-layer-report",
+    "transaction_assurance": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/transaction-assurance",
+    "services": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/services",
+    "health": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/health",
+    "openapi": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json",
+    "pricing": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/pricing.json",
+    "capabilities": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/capabilities.json",
+    "discover": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/discover",
+    "mcp": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+    "agent_card": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json"
+  },
+  "trust_reflex": {
+    "interface": "trust(action)",
+    "decisions": [
+      "ALLOW",
+      "VERIFY",
+      "REQUIRE_VERIFICATION",
+      "DENY"
+    ],
+    "trust_receipt_version": "1.3",
+    "first_qualifying_decisions_free": 1000,
+    "production_price_usdc": 0.01,
+    "production_amount_atomic_usdc": 10000,
+    "network": "eip155:8453",
+    "status": "LIVE: free quota then x402"
+  },
+  "paid_services": {
+    "evidence_signal": {
+      "price_usdc": 0.25,
+      "amount_atomic": 250000
+    },
+    "reputation_check": {
+      "price_usdc": 0.1,
+      "amount_atomic": 100000
+    },
+    "milestone_attestation": {
+      "price_usdc": 0.25,
+      "amount_atomic": 250000
+    },
+    "trust_layer_report": {
+      "price_usdc": 0.5,
+      "amount_atomic": 500000
+    },
+    "transaction_assurance": {
+      "under_50000": {
+        "fee_percent": 2,
+        "minimum_usd": 9
+      },
+      "at_or_above_50000": {
+        "fee_percent": 1,
+        "minimum_usd": 25
+      }
+    }
+  },
+  "payment": {
+    "protocol": "x402",
+    "version": 2,
+    "scheme": "exact",
+    "asset": "USDC",
+    "network": "eip155:8453"
+  },
+  "adoption_path": [
+    "DISCOVER",
+    "UNDERSTAND",
+    "TEST",
+    "TRUST",
+    "INSERT",
+    "BUY",
+    "EXPAND"
+  ],
+  "pricing_rule": "PROJECT OVERREACT-428 launch pricing is live end-to-end on the canonical Supabase facade. Review after approximately 60 days; increases are never automatic.",
+  "custody": "MUJ428 does not custody buyer/seller transaction principal.",
+  "n428": {
+    "discovery": "https://agents.muj428.com/.well-known/n428.json",
+    "protocol_version": "1.0",
+    "external_adoption_claimed": false,
+    "auto_spend": false
+  },
+  "first_action_default": {
+    "namespace": "com.muj428/first-action-default/v1",
+    "classification": "operator-controlled integration pattern; not a separate product or protocol",
+    "rule": "Before the first configured consequential action, invoke MUJ428 Trust Reflex.",
+    "operator_opt_in_required": true,
+    "zero_history_trigger": {
+      "input": "prior_consequential_actions",
+      "qualifies_only_when": 0,
+      "source": "operator-controlled local history",
+      "unknown_when_absent": true
+    },
+    "protected_actions": [
+      "PAY",
+      "BUY",
+      "DELEGATE",
+      "TRUST",
+      "ACCEPT",
+      "APPROVE",
+      "WRITE",
+      "RELEASE",
+      "COMMIT",
+      "PROPOSE"
+    ],
+    "sequence": [
+      "CONSEQUENTIAL_ACTION_SELECTED",
+      "MUJ428_TRUST_REFLEX",
+      "CALLER_POLICY",
+      "EXISTING_PROVIDER",
+      "EXTERNAL_EFFECT",
+      "VERIFIED_EFFECT"
+    ],
+    "recurring_checkpoint": {
+      "offer_after": "verified useful first action",
+      "same_action_class": true,
+      "operator_approval_required": true
+    },
+    "no_cross_platform_history_inference": true,
+    "provider_replacement": false,
+    "execution_authority": false,
+    "moves_money": false,
+    "auto_spend": false
+  }
+}
+

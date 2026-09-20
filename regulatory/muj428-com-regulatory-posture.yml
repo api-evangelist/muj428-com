@@ -1,0 +1,26 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: live probes of agents.muj428.com and muj428.com on 2026-09-19, plus the harvested well-known/, security/, lifecycle/ and conformance/ artifacts
+signals: {}
+notes: >-
+  An empty signals map is the measurement, not a gap in the pass. MUJ428 publishes an unusually dense MACHINE surface
+  (api-catalog, agent card, mcp.json, agent-permissions.json, a source-bound history that forbids backdating) and
+  essentially no LEGAL surface: there is no privacy policy, no terms of service, no accessibility statement, no
+  subprocessor list, no DPA, no transparency report and no security.txt anywhere. The apex muj428.com is a Porkbun
+  parking page. The one document that touches regulatory-adjacent ground is agent-permissions.json (browser-agent
+  MUST/MUST NOT rules and "MUST NOT send private keys ... or other secrets to MUJ428"), which is a security posture
+  statement rather than any of the fourteen harvestable signals. Nothing here infers that a regime applies.
+probed:
+- {url: 'https://agents.muj428.com/privacy', status: 404}
+- {url: 'https://agents.muj428.com/privacy/requests', status: 404}
+- {url: 'https://agents.muj428.com/terms', status: 404}
+- {url: 'https://agents.muj428.com/legal', status: 404}
+- {url: 'https://agents.muj428.com/legal/subprocessors', status: 404}
+- {url: 'https://agents.muj428.com/legal/dpa', status: 404}
+- {url: 'https://agents.muj428.com/accessibility', status: 404}
+- {url: 'https://agents.muj428.com/transparency', status: 404}
+- {url: 'https://agents.muj428.com/security', status: 404}
+- {url: 'https://agents.muj428.com/.well-known/security.txt', status: 404}
+- {url: 'https://agents.muj428.com/sitemap.md', status: 200, note: 'The provider''s own full sitemap lists no privacy, terms, accessibility, subprocessor or transparency page.'}
+- {url: 'https://muj428.com/', status: 200, note: 'Redirects to https://muj428-com.l.ink/ — Porkbun "A Brand New Domain!" parking page; no legal pages exist on the apex.'}

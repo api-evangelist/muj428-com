@@ -1,0 +1,151 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.wmujahid428-web/muj428-trust-layer",
+  "title": "MUJ428 Trust Layer — VERIFY BEFORE ACT",
+  "description": "Machine-native trust preflight and intent-to-effect integrity for consequential AI-agent actions. Returns actionable decisions with a portable Trust Receipt.",
+  "version": "1.8.3",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp"
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/wmujahid428-web/muj428-a2a-revenue-engine",
+    "source": "github"
+  },
+  "_meta": {
+    "canonicalProduction": true,
+    "canonicalMcpUrl": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+    "officialMcpRegistryName": "io.github.wmujahid428-web/muj428-trust-layer",
+    "sourceVersion": "1.8.3",
+    "website": "https://agents.muj428.com/",
+    "developerKit": "https://agents.muj428.com/developer.json",
+    "a2aAgentCard": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json",
+    "trustKernel": {
+      "protocol": "muj428-trust-kernel",
+      "version": "1.0",
+      "coreRule": "BEFORE CONSEQUENCE -> CALL MUJ428",
+      "canonical": "https://agents.muj428.com/trust-kernel.json",
+      "wellKnown": "https://agents.muj428.com/.well-known/muj428-trust-kernel.json",
+      "sha256": "68b0418841d58d3e977105a5d923d3ebec741aa4d83292d8a1276a7b86d01cee",
+      "terminalBoundaryRequired": true,
+      "upstreamTrustClaimSufficient": false,
+      "callerPolicyControlsExecution": true,
+      "defaultFailurePolicy": "BLOCK"
+    },
+    "trustReflex": {
+      "url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust",
+      "router": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/route",
+      "supportedActions": [
+        "PAY",
+        "BUY",
+        "DELEGATE",
+        "TRUST",
+        "ACCEPT",
+        "APPROVE",
+        "WRITE",
+        "RELEASE",
+        "COMMIT",
+        "PROPOSE"
+      ],
+      "receiptVersion": "1.3",
+      "firstQualifyingDecisionsFree": 1000,
+      "productionPriceUSDC": 0.01,
+      "productionAtomicUSDC": 10000,
+      "network": "eip155:8453",
+      "paymentProtocol": "x402 v2",
+      "autoSpend": false,
+      "firstActionDefault": {
+        "namespace": "com.muj428/first-action-default/v1",
+        "rule": "Before the first configured consequential action, invoke MUJ428 Trust Reflex.",
+        "operatorOptInRequired": true,
+        "zeroHistoryInput": "prior_consequential_actions",
+        "zeroHistoryQualifiesOnlyWhen": 0,
+        "unknownWhenAbsent": true,
+        "noCrossPlatformHistoryInference": true,
+        "providerReplacement": false,
+        "recurringCheckpointAvailable": true,
+        "executionAuthority": false,
+        "autoSpend": false
+      }
+    },
+    "permanentPaidServiceBase": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402",
+    "paidServices": {
+      "evidenceSignal": {
+        "priceUSDC": 0.25,
+        "atomicUSDC": 250000,
+        "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/evidence-signal"
+      },
+      "reputationCheck": {
+        "priceUSDC": 0.1,
+        "atomicUSDC": 100000,
+        "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/reputation-check"
+      },
+      "milestoneAttestation": {
+        "priceUSDC": 0.25,
+        "atomicUSDC": 250000,
+        "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/milestone-attestation"
+      },
+      "trustLayerReport": {
+        "priceUSDC": 0.5,
+        "atomicUSDC": 500000,
+        "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/trust-layer-report"
+      },
+      "transactionAssurance": {
+        "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/transaction-assurance",
+        "under50000": {
+          "feePercent": 2,
+          "minimumUSD": 9
+        },
+        "atOrAbove50000": {
+          "feePercent": 1,
+          "minimumUSD": 25
+        }
+      }
+    },
+    "tools": [
+      "rescue_agent_before_consequence",
+      "trust_action",
+      "invoke_trust_service",
+      "get_service_catalog",
+      "get_trust_layer_pricing",
+      "select_assurance_tier",
+      "get_capabilities",
+      "resolve_trust_route",
+      "get_trust_heartbeat",
+      "find_trust_capabilities",
+      "publish_trust_request",
+      "observe_trust_compatibility"
+    ],
+    "movesMoney": false,
+    "autoSpend": false,
+    "externalAdoptionClaimed": false,
+    "trustGravity": {
+      "version": "1.1.0",
+      "policyEpoch": "2026-08-30.1",
+      "receiptVersion": "1.3",
+      "originService": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-gravity",
+      "endpoints": {
+        "agent_router": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/route",
+        "trust_dns": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-dns/resolve",
+        "trust_heartbeat": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/heartbeat",
+        "compatibility_directory": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/compatibility",
+        "compatibility_observation": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/compatibility/observe",
+        "trust_requests": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-requests",
+        "loop_status": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/loop/status",
+        "rescue_beacon": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue"
+      },
+      "selfAttestedCompatibilityIsAuthorization": false,
+      "externalAdoptionClaimed": false
+    },
+    "agentRescueBeacon": {
+      "protocol": "muj428-agent-rescue-beacon/1",
+      "tool": "rescue_agent_before_consequence",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue",
+      "peerMessageIsAuthority": false,
+      "executionAuthority": false
+    }
+  }
+}
+

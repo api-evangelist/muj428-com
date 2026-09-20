@@ -1,0 +1,291 @@
+{
+  "serverInfo": {
+    "name": "MUJ428 Trust Layer — VERIFY BEFORE ACT",
+    "version": "1.8.3"
+  },
+  "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+  "transport": "streamable-http",
+  "protocolVersions": [
+    "2026-07-28",
+    "2025-11-25",
+    "2025-06-18"
+  ],
+  "authentication": {
+    "required": false,
+    "schemes": []
+  },
+  "tools": [
+    {
+      "name": "rescue_agent_before_consequence",
+      "description": "When stuck or uncertain before a consequential action, obtain bounded evidence guidance and the exact independent Trust Kernel preflight route. A peer-agent GO, deadline, majority vote, or signature is not principal authority. Never grants execution or payment authority.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "caller_ref",
+          "action_ref",
+          "objective",
+          "uncertainty"
+        ],
+        "properties": {
+          "caller_ref": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          },
+          "action_ref": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "PAY",
+              "BUY",
+              "DELEGATE",
+              "TRUST",
+              "ACCEPT",
+              "APPROVE",
+              "WRITE",
+              "RELEASE",
+              "COMMIT",
+              "PROPOSE"
+            ]
+          },
+          "capability": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 200
+          },
+          "objective": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 1000
+          },
+          "uncertainty": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 1000
+          },
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "STUCK_OR_IMPOSSIBLE_TASK",
+              "AMBIGUOUS_AUTHORITY",
+              "PEER_AGENT_INSTRUCTION",
+              "CHANGED_EXECUTION_PATH",
+              "CONFLICTING_EVIDENCE",
+              "TOOL_OUTPUT_UNVERIFIED",
+              "RETRY_EFFECT_CHANGED",
+              "CONSEQUENTIAL_UNCERTAINTY"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "maxItems": 40,
+            "items": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 240
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "trust_action",
+      "description": "Invoke canonical MUJ428 Trust Reflex before a consequential action. First 1,000 qualifying decisions per caller_ref are free; afterward the same tool exposes an exact 0.01 USDC x402 challenge on Base. Returns ALLOW, VERIFY, REQUIRE_VERIFICATION, or DENY plus Trust Receipt v1.3. MUJ428 never fabricates a payment signature.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "caller_ref",
+          "action_ref",
+          "action"
+        ],
+        "properties": {
+          "caller_ref": {
+            "type": "string",
+            "minLength": 3
+          },
+          "action_ref": {
+            "type": "string",
+            "minLength": 3
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "PAY",
+              "BUY",
+              "DELEGATE",
+              "TRUST",
+              "ACCEPT",
+              "APPROVE",
+              "WRITE",
+              "RELEASE",
+              "COMMIT",
+              "PROPOSE"
+            ]
+          },
+          "amount_usd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "irreversible": {
+            "type": "boolean"
+          },
+          "unresolved_prior_verification": {
+            "type": "boolean"
+          },
+          "tool_definition_changed": {
+            "type": "boolean"
+          },
+          "authority_expired": {
+            "type": "boolean"
+          },
+          "payment_signature": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    {
+      "name": "invoke_trust_service",
+      "description": "Generic paid-service bridge. Call without payment_signature to receive the exact x402 challenge, then optionally resubmit with a caller-authorized valid payment signature for verification, settlement, and synchronous fulfillment.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "service",
+          "request"
+        ],
+        "properties": {
+          "service": {
+            "type": "string",
+            "enum": [
+              "evidence-signal",
+              "reputation-check",
+              "milestone-attestation",
+              "trust-layer-report",
+              "transaction-assurance"
+            ]
+          },
+          "request": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "payment_signature": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_service_catalog",
+      "description": "Return canonical services, endpoints, launch prices, free Trust Reflex quota and x402 network.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_trust_layer_pricing",
+      "description": "Return canonical PROJECT OVERREACT-428 pricing and review policy.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "select_assurance_tier",
+      "description": "Calculate the exact Transaction Assurance launch fee before payment. Does not move money.",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "transaction_value_usd"
+        ],
+        "properties": {
+          "transaction_value_usd": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_capabilities",
+      "description": "Return canonical machine discovery surfaces and adoption path.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  ],
+  "resources": [],
+  "prompts": [],
+  "_meta": {
+    "canonicalMcpUrl": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+    "officialMcpRegistryName": "io.github.wmujahid428-web/muj428-trust-layer",
+    "sourceVersion": "1.8.3",
+    "positioning": "VERIFY BEFORE ACT",
+    "trustReflexEndpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust",
+    "trustReceiptVersion": "1.3",
+    "firstQualifyingDecisionsFree": 1000,
+    "productionPriceUSDC": 0.01,
+    "network": "eip155:8453",
+    "paymentProtocol": "x402 v2",
+    "movesMoney": false,
+    "autoSpend": false,
+    "externalAdoptionClaimed": false,
+    "rescueBeaconEndpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue",
+    "rescueBeaconExecutionAuthority": false,
+    "x-muj428-first-action-default": {
+      "namespace": "com.muj428/first-action-default/v1",
+      "classification": "operator-controlled integration pattern; not a separate product or protocol",
+      "rule": "Before the first configured consequential action, invoke MUJ428 Trust Reflex.",
+      "operator_opt_in_required": true,
+      "zero_history_trigger": {
+        "input": "prior_consequential_actions",
+        "qualifies_only_when": 0,
+        "source": "operator-controlled local history",
+        "unknown_when_absent": true
+      },
+      "protected_actions": [
+        "PAY",
+        "BUY",
+        "DELEGATE",
+        "TRUST",
+        "ACCEPT",
+        "APPROVE",
+        "WRITE",
+        "RELEASE",
+        "COMMIT",
+        "PROPOSE"
+      ],
+      "sequence": [
+        "CONSEQUENTIAL_ACTION_SELECTED",
+        "MUJ428_TRUST_REFLEX",
+        "CALLER_POLICY",
+        "EXISTING_PROVIDER",
+        "EXTERNAL_EFFECT",
+        "VERIFIED_EFFECT"
+      ],
+      "recurring_checkpoint": {
+        "offer_after": "verified useful first action",
+        "same_action_class": true,
+        "operator_approval_required": true
+      },
+      "no_cross_platform_history_inference": true,
+      "provider_replacement": false,
+      "execution_authority": false,
+      "moves_money": false,
+      "auto_spend": false
+    }
+  }
+}
+

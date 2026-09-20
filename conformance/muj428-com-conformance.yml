@@ -1,0 +1,136 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  Live probes of agents.muj428.com and the Supabase facade on 2026-09-19 (api-catalog, mcp.json, agent card,
+  x402 manifest, tools/list, headers) plus the provider's own openapi.json, developer.json, AGENTS.md,
+  payment-rails.json and status endpoints. Every `conforms: true` below names the document or response that
+  proves it; every `false` names the probe that missed.
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: https://agents.muj428.com/openapi.json declares openapi 3.1.0 (info.version 1.8.2, 24 operations); the canonical facade's /openapi.json is also 3.1.0 (1.8.3, 20 operations). Saved verbatim under openapi/.
+  - id: rfc9727-api-catalog
+    conforms: true
+    evidence: GET https://agents.muj428.com/.well-known/api-catalog returns 200 with Content-Type application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727" and a linkset[] carrying service-desc, service-doc and status relations. Saved as well-known/muj428-com-api-catalog.json.
+  - id: mcp
+    conforms: true
+    evidence: POST initialize/tools/list at https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp returns protocolVersion 2025-06-18 and 14 tools (mcp/muj428-com-mcp-tools.json); a second facade at https://agents.muj428.com/mcp returns 2 tools. Streamable HTTP, POST only.
+  - id: mcp-server-json
+    conforms: true
+    evidence: https://agents.muj428.com/.well-known/mcp.json validates against the static.modelcontextprotocol.io 2025-12-11 server.schema.json shape ($schema, name io.github.wmujahid428-web/muj428-trust-layer, remotes[].type streamable-http); the server is listed in the official MCP registry (registry.modelcontextprotocol.io, published 2026-08-10).
+  - id: mcp-server-card
+    conforms: true
+    evidence: https://agents.muj428.com/mcp/server-card returns 200 with Content-Type application/mcp-server-card+json and $schema static.modelcontextprotocol.io/schemas/v1/server-card.schema.json.
+  - id: a2a
+    conforms: false
+    grade: flavored
+    evidence: >-
+      A card is served at https://agents.muj428.com/.well-known/agent-card.json (capabilities object, skills array, supportedInterfaces
+      with a JSONRPC binding) but omits the required top-level protocolVersion and url, so it fails A2A 1.0.0 hard checks —
+      graded flavored (0.25) in a2a/muj428-com-a2a.yml. The JSON-RPC endpoint at https://agents.muj428.com/a2a is live and
+      answers -32600 until the Trust Reflex extension is activated with the A2A-Extensions header.
+  - id: a2a-extensions
+    conforms: true
+    evidence: capabilities.extensions[] carries two resolvable extension URIs; https://agents.muj428.com/extensions/trust-reflex/v1 (200) is a descriptor declaring activation header A2A-Extensions, rpcMethods [trust/evaluate] and protocolVersions [1.0, 0.3].
+  - id: agents-json-0.2
+    conforms: true
+    evidence: https://agents.muj428.com/agents.json declares agentsJson 0.2.0 with sources[] -> the facade openapi.json and flows[] bound to operationIds trustAction, evidenceSignal, reputationCheck, milestoneAttestation and others. Saved as openapi/_original/muj428-com-agents.json.
+  - id: llms-txt
+    conforms: true
+    evidence: https://agents.muj428.com/llms.txt (200, text/plain, 9.9 KB) and /llms-full.txt (200) — saved verbatim under llms/ (full variant gitignored).
+  - id: x402
+    conforms: true
+    evidence: >-
+      Declared, not live-observed. The OpenAPI declares 402 responses on /v1/trust and the five paid operations ("0.01 USDC x402
+      payment required after free quota"); /.well-known/x402 serves an agent402-service-manifest/1 listing five paid resources
+      under /functions/v1/trust-layer-x402/; the facade's CORS headers expose PAYMENT-REQUIRED and PAYMENT-RESPONSE and allow
+      payment-signature; payment-rails.json reports x402 status live for USDC on eip155:8453. An empty-body POST to the x402
+      evidence-signal endpoint returned 422 invalid_request (validation runs before the payment challenge), so no 402 was
+      captured by this pass. NOTE the rubric scores no x402 check by design.
+  - id: mpp
+    conforms: true
+    evidence: >-
+      Declared. https://agents.muj428.com/v1/mpp/status reports provider stripe-mpp, mode live, production_verified true, challenge
+      scheme "Payment" (payment-rails.json capabilities[].id mpp, modes charge/authorize/subscription/session). Not exercised
+      by this pass; funds_moved_by_status_check is false by the provider's own statement.
+  - id: ap2
+    conforms: true
+    evidence: >-
+      Declared. https://agents.muj428.com/v1/ap2/status reports protocol AP2 version 0.2 (spec_release v0.2.0), checkout_vct
+      mandate.checkout.1, payment_vct mandate.payment.1, sd_jwt_supported true, settlement_rail false (AP2 is authorization
+      evidence, not settlement, per the provider's verifier spec). Nothing anonymous is fetchable beyond the status document.
+  - id: json-schema-2020-12
+    conforms: true
+    evidence: Every MCP tool inputSchema on the canonical server declares "$schema":"https://json-schema.org/draft/2020-12/schema" (mcp/muj428-com-mcp-tools.json).
+  - id: cors
+    conforms: true
+    evidence: 'Observed on GET /services: access-control-allow-origin *, allow-methods GET,POST,OPTIONS, allow-headers authorization, x-client-info, apikey, content-type, payment-signature, x-request-id, idempotency-key, muj428-observer-ref; expose-headers PAYMENT-REQUIRED, PAYMENT-RESPONSE, EXTENSION-RESPONSES, X-Request-Id, MUJ428-Receipt-Required, Link, X-MUJ428-Policy-Epoch.'
+  - id: hsts
+    conforms: true
+    evidence: 'Observed on the facade: strict-transport-security: max-age=31536000; includeSubDomains; preload. See security/muj428-com-domain-security.yml for agents.muj428.com.'
+  - id: oauth2
+    conforms: false
+    evidence: No securitySchemes in either OpenAPI; /.well-known/oauth-authorization-server 404 on agents.muj428.com and on the Supabase root; AGENTS.md says no API key is required. Access is anonymous (free) or payment-gated (x402).
+  - id: rfc8414-authorization-server-metadata
+    conforms: false
+    evidence: /.well-known/oauth-authorization-server -> 404 on every host.
+  - id: rfc9728-protected-resource-metadata
+    conforms: false
+    evidence: /.well-known/oauth-protected-resource -> 404 on agents.muj428.com and the Supabase root (the MCP resource host).
+  - id: oidc-discovery
+    conforms: false
+    evidence: /.well-known/openid-configuration -> 404 on every host.
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt and /security.txt -> 404 on agents.muj428.com; the apex 302s to a parking page.
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors are application/json with a flat provider envelope — observed 422 {"error":"invalid_request","service":"trust-reflex"}
+      on POST /v1/trust and 422 {"ok":false,"error":"action_or_capability_required","allowed_actions":[...]} on POST /v1/route;
+      404 {"error":"not_found","discover":"..."}. No application/problem+json anywhere. See errors/muj428-com-problem-types.yml.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No Deprecation/Sunset headers observed or documented; no operation is marked deprecated. Backward-compatibility shims (legacy nested action object, legacy X-A2A-Extensions header, N428 v1 schema) are documented but without a sunset.
+  - id: asyncapi
+    conforms: false
+    evidence: No event, webhook or streaming surface — the agent card declares streaming false and pushNotifications false; no /asyncapi.yaml on any host. Not penalised (no event surface).
+  - id: idempotency
+    conforms: partial
+    evidence: >-
+      The TrustAction schema states "replaying the same caller_ref/action_ref does not consume another free decision" and
+      developer.json sets replay_same_caller_action_consumes_quota false — a per-action replay key on the preflight only. The
+      facade's CORS allow-list names an idempotency-key request header that no document describes. Coverage partial; see
+      conventions/muj428-com-conventions.yml.
+  - id: pagination
+    conforms: false
+    evidence: No pagination parameters or response fields in the 24-operation spec; the two list reads (/v1/compatibility, /v1/trust-requests) return unpaged arrays.
+domain_standards:
+  market: agent trust / agent commerce infrastructure
+  note: >-
+    The market's machine standards are the agent protocols themselves (A2A, MCP, agents.json) and the machine-payment
+    protocols (x402, MPP, AP2). MUJ428 declares all six in its CONTRACT and discovery documents, not only in prose:
+    the OpenAPI declares 402 responses and x-muj428.payment_protocol "x402 v2"; the agent card carries A2A extension URIs;
+    mcp.json and the server card use the MCP registry schemas; agents.json binds flows to operationIds; the AP2/MPP status
+    endpoints are machine documents. The rubric records no x402/AP2 check by design (nothing anonymous is measurable),
+    so these are recorded here as declared conformance with pointers, and A2A is graded rather than credited.
+  signatures:
+  - standard: A2A extension URI
+    location: a2a/muj428-com-agent-card.json#/capabilities/extensions
+    value: https://agents.muj428.com/extensions/trust-reflex/v1
+  - standard: x402 (402 + PAYMENT-REQUIRED)
+    location: openapi/muj428-com-trust-layer-openapi.json#/paths/~1v1~1trust/post/responses/402
+    value: "0.01 USDC x402 payment required after free quota"
+  - standard: MCP server.json
+    location: well-known/muj428-com-mcp.json#/$schema
+    value: https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json
+  - standard: agents.json
+    location: openapi/_original/muj428-com-agents.json#/agentsJson
+    value: 0.2.0
+  - standard: AP2
+    location: https://agents.muj428.com/v1/ap2/status
+    value: version 0.2, checkout_vct mandate.checkout.1, payment_vct mandate.payment.1
+compliance_programs: []
+compliance_note: >-
+  No SOC 2 / ISO 27001 / PCI or other certification is claimed anywhere on the provider's surfaces (probe-security-programs.py
+  found no trust center; /security, /trust, /compliance 404). No Compliance pointer is emitted.

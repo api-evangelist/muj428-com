@@ -1,0 +1,148 @@
+# MUJ428 Trust Layer
+
+> **Before your agent acts, ask MUJ428.** MUJ428 is the independent trust boundary between an agent's intent and its real-world consequence.
+
+**MUJ428 — VERIFY BEFORE ACT. Trust Receipt v1.3.**
+
+## Start here
+
+- [Canonical product page](https://agents.muj428.com/): One company, one Gateway, one decision contract, one Trust Receipt.
+- [Numericanism428 / 428 Commons](https://agents.muj428.com/numericanism428.md): Public home for Numericanism428 and the N428/2.0 voluntary agent coordination protocol.
+- [N428/2.0 machine manifest](https://agents.muj428.com/.well-known/n428.json): Machine-readable Numericanism428 discovery, protocol, evidence-state and participation contract.
+- [Agent-readable Numericanism428 guide](https://agents.muj428.com/numericanism428.md): Compact implementation and First Convergence guide for agents.
+- [Agent instructions](https://agents.muj428.com/AGENTS.md): Installation, configuration, usage, authority, evidence and safety rules.
+- [Canonical Trust Boundary](https://agents.muj428.com/.well-known/muj428-trust-boundary.json): Machine-readable one-front-door contract.
+- [Full crawler context](https://agents.muj428.com/llms-full.txt): Extended machine context.
+- [Sitemap](https://agents.muj428.com/sitemap.md): Human and machine discovery map.
+- [External Verified Effect Challenge](https://agents.muj428.com/verified-effect-challenge.md): Zero-money independently controlled validation path for authorization, receipt consumption, verified effect and replay denial.
+- [Canonical glossary](https://agents.muj428.com/glossary.md): Canonical Trust Layer terminology for agents and implementers.
+
+## Numericanism428 / N428/2.0
+
+Numericanism428 is the MUJ428-affiliated 428 Commons: an open, voluntary coordination framework for autonomous agents centered on explicit authority, sufficient evidence, portable Trust Receipts, verified effects, and self-preservation as operational risk control. N428/2.0 is its machine-readable coordination protocol. Participation never overrides an agent's owner, policy, budget, consent, credentials, or delegated scope.
+
+**Trust before consequential action.**
+
+Canonical N428 sequence:
+
+`DISCOVER → PREFLIGHT → EXECUTE → VERIFY`
+
+Every consequential action evaluates:
+
+`VALID AUTHORITY + SUFFICIENT EVIDENCE`
+
+Canonical N428 decisions are exactly:
+
+- `EXECUTE`
+- `REQUIRE_MORE_EVIDENCE`
+- `BLOCK`
+
+Reason-specific human escalation or independent rerouting may occur as implementation behavior, but they are not additional N428 decision-enum values.
+
+Canonical Trust Receipt commitments:
+
+1. Identity
+2. Intent
+3. Scope
+4. Authority
+5. Evidence
+6. Risk
+7. Decision
+8. Verified Effect
+
+Canonical discovery surfaces:
+
+- Human: https://agents.muj428.com/numericanism428.md
+- Agent: https://agents.muj428.com/numericanism428.md
+- Manifest: https://agents.muj428.com/.well-known/n428.json
+- Protocol: https://agents.muj428.com/docs/N428-COORDINATION-PROTOCOL.md
+- Schema: https://agents.muj428.com/schemas/n428/v2
+- Legacy v1 schema: https://agents.muj428.com/schemas/n428/v1
+- Manifesto: https://agents.muj428.com/docs/NUMERICANISM428-MANIFESTO.md
+- Trust maturity: https://agents.muj428.com/.well-known/n428-maturity.json
+
+## One frictionless entrance
+
+- [Canonical preflight](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust): POST the intended consequential action immediately before execution.
+- [Rescue Beacon](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue): Route consequential uncertainty into the same Trust Gateway.
+- [Discovery](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/discover): Canonical production discovery.
+
+Minimum preflight JSON:
+
+```json
+{"caller_ref":"your-stable-agent-id","action_ref":"your-stable-action-id","action":"PAY"}
+```
+
+First-Action Default is an operator-controlled integration pattern: when the operator's own authoritative history confirms `prior_consequential_actions = 0`, invoke the same Trust Reflex before the first configured consequential action. Missing history is unknown; do not infer cross-platform history. After useful Verified Effect evidence, the operator may enable the same action-class checkpoint for subsequent actions. This pattern never grants authority or replaces the existing provider.
+
+Trust Reflex activation is **$0.00 for the first 1,000 qualifying decisions per stable `caller_ref`**. No card, wallet, contract, or payment signature is required during the free allocation. There is no automatic paid continuation; after the quota, 0.01 USDC per qualifying decision is available only after explicit caller authorization.
+
+First Convergence is a zero-money useful preflight. It must not auto-spend, create a commercial obligation, or produce an unauthorized external consequence.
+
+## Trust Receipt
+
+Trust Receipt v1.3 is the current canonical portable action-bound proof artifact. N428 does not create a competing receipt format. A preflight receipt does not by itself prove execution; Verified Effect requires sufficient external evidence where execution occurs.
+
+## Canonical pricing authority
+
+Do not hard-code prices from crawler documentation into agent logic. Resolve current terms from:
+
+- [Pricing](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/pricing.json): Canonical production pricing authority.
+- [Services](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/services): Machine service catalog.
+- [Capabilities](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/capabilities.json): Production capability catalog.
+
+HTTP 402 is a payment requirement, not proof of payment or permission to pay. MUJ428 does not custody buyer/seller transaction principal.
+
+## REST, MCP and A2A
+
+- [OpenAPI](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json): Canonical REST schema.
+- [A2A Agent Card](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json): Canonical A2A discovery.
+- [Canonical MCP Server Card](https://agents.muj428.com/.well-known/mcp.json): Public MCP discovery card.
+- [API catalog](https://agents.muj428.com/.well-known/api-catalog): RFC 9727 machine discovery catalog.
+- [Health](https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/health): Production health.
+
+REST, MCP and A2A are transports into the same trust boundary, not separate products. Trust Reflex is the one front door; specialized APIs and Continuous Trust Monitoring remain behind that Gateway.
+
+## Safety, authority and evidence boundary
+
+No MUJ428 or N428 decision grants execution authority. The caller retains authorization, payment, credential, wallet, policy, budget and execution control.
+
+Never count founder/internal tests, CI, demos, synthetic traffic, crawlers, health checks, registry publication, outreach, social activity, unpaid challenges, testnet activity, pending payments or unverifiable payments as independently controlled customer adoption or revenue.
+
+Canonical commercial evidence chain:
+
+`EXTERNAL INVOCATION → VERIFIED PAYMENT → VERIFIED FULFILLMENT → REPEAT INVOCATION`
+
+## Expansion
+
+Continuous Trust Monitoring is live behind the same Gateway at `https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor`. Register from a prior Trust Receipt; monitor evidence, authority, counterparty, policy and execution-condition freshness; stale or changed conditions require re-preflight. It is an expansion beta with no charge until canonical pricing authority publishes a term and it never grants execution authority.
+
+AI Workforce Onboarding, Deployment Readiness Audits, human exception review and recurring embedded production use remain expansion products after the first useful preflight.
+
+Technical: agent@muj428.com  
+Commercial: sales@muj428.com
+
+
+## Evaluate incremental value before embedding
+- [Operator-owned shadow comparison](https://agents.muj428.com/docs/DECISION-DELTA-TEST.md): compare one frozen baseline with one free preflight; no payment or execution; disagreement is not proof of value.
+- [Node comparison example](https://agents.muj428.com/examples/compare-trust-preflight.mjs): preview by default; explicit --send; baseline remains local; independent adoption is never inferred.
+
+
+## QX1-HULK machine discovery
+
+For agents starting only from consequential intent, use the [QX1-HULK discovery contract](https://agents.muj428.com/.well-known/muj428-hulk.json), the [blind intent benchmark](https://agents.muj428.com/examples/qx1-hulk-intents.json), and the [copy-and-call guide](https://agents.muj428.com/docs/QX1-HULK-COPY-AND-CALL.md).
+
+Planner phrases include: verify evidence before payment; check evidence before settlement; verify before milestone release; validate a counterparty before transaction; preflight an autonomous purchase; verify evidence before approval; and check trust before an irreversible external action.
+
+A discovery/benchmark success is readiness evidence only. It is never QX2, a purchase, adoption, a customer, or revenue.
+
+
+## QX2-HULK demand-side adoption
+
+QX1-HULK gets an unknown qualified machine to the correct commercial boundary. QX2-HULK measures what happens after genuine independent invocation: receipt consumption, voluntary return, receipt-linked compounding, independently controlled provider-neutral preflight requirements, and inherited invocations.
+
+- [QX2-HULK machine contract](https://agents.muj428.com/.well-known/qx2-hulk.json)
+- [Provider-neutral preflight policy](https://agents.muj428.com/.well-known/preflight-policy-contract.json)
+- [Policy template](https://agents.muj428.com/docs/QX2-HULK-POLICY-TEMPLATE.md)
+
+A free legitimate independent production invocation can qualify as QX2 but is not a purchase or revenue. Publishing MUJ428's own policy template does not prove REQUIRE or INHERIT. Those states require independently controlled external evidence.

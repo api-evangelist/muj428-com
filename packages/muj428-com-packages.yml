@@ -1,0 +1,76 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://agents.muj428.com/AGENTS.md (Installation), https://agents.muj428.com/developer.json (sdk, frameworks),
+  https://agents.muj428.com/sdk/README.md, the two tarballs fetched and unpacked from agents.muj428.com/sdk/ on
+  2026-09-19, and registry sweeps: registry.npmjs.org search for "muj428" (empty result set), pypi.org/pypi/muj428/json
+  (404), github.com/wmujahid428-web (user exists, "doesn't have any public repositories yet"),
+  github.com/wmujahid428-web/muj428-a2a-revenue-engine (404).
+summary:
+  first_party_sdk_count: 2
+  third_party_package_count: 0
+  note: >-
+    Two first-party JavaScript packages exist and are distributed ONLY as tarballs from the provider's own host — neither
+    is on npm (developer.json says so outright: npm_registry_published false), the npm search for "muj428" returns nothing,
+    and the repository the langchain package's package.json points at is not publicly reachable. Both are pinned by
+    version in the download URL (0.1.1; the sitemap still links 0.1.0 tarballs), and the client tarball ships a
+    published .sha256 (5f46df38423cd31d9cd31d74841aadb73949080698d8440598e03f123a188abf, matched on download). No
+    `published:` date is recoverable — there is no registry metadata and the tarball entries carry normalised
+    mtimes (1985-10-26 / 1970-01-01, the reproducible-build convention) — so `published: null` is an honest gap,
+    not a guess. AGENTS.md is explicit that "No package is required for the canonical REST or MCP production
+    surfaces." Six single-file Python framework adapters are served as examples, not packages, and are listed
+    separately.
+github_organization:
+  found: false
+  checked: '2026-09-19'
+  note: github.com/wmujahid428-web is a personal account with zero public repositories; the named product repository returns 404. No GitHubOrganization pointer is emitted.
+packages:
+- language: javascript
+  registry: cdn
+  name: '@muj428/trust-client'
+  url: https://agents.muj428.com/sdk/muj428-trust-client-0.1.1.tgz
+  docs: https://agents.muj428.com/sdk/README.md
+  install: npm install https://agents.muj428.com/sdk/muj428-trust-client-0.1.1.tgz
+  official: true
+  version: 0.1.1
+  published: null
+  checksum: sha256:5f46df38423cd31d9cd31d74841aadb73949080698d8440598e03f123a188abf (published at https://agents.muj428.com/sdk/muj428-trust-client-0.1.1.tgz.sha256; verified)
+  license: UNLICENSED (package.json)
+  engines: node >=18
+  dependencies: 0
+  contents: [package/package.json, package/README.md, package/index.mjs]
+  note: >-
+    Zero-dependency ESM client providing discover(), free trust(action) preflight and Transaction Assurance quoting; the
+    README states it "intentionally provides no payment, transfer, signing, settlement, wallet, or PAYMENT-SIGNATURE
+    method". Version read from the pinned URL and the unpacked package.json. No registry metadata endpoint exists for a
+    tarball on the provider's host, hence published null.
+- language: javascript
+  registry: cdn
+  name: '@muj428/langchain-middleware'
+  url: https://agents.muj428.com/sdk/muj428-langchain-middleware-0.1.1.tgz
+  docs: https://agents.muj428.com/integrations/langchain-middleware.json
+  install: npm install langchain https://agents.muj428.com/sdk/muj428-langchain-middleware-0.1.1.tgz
+  official: true
+  version: 0.1.1
+  published: null
+  license: MIT (package.json)
+  engines: node >=20
+  peer_dependencies: {langchain: '>=1.0.0'}
+  repository: https://github.com/wmujahid428-web/muj428-a2a-revenue-engine (directory packages/muj428-langchain-middleware) — returns 404
+  contents: [package/package.json, package/README.md, package/src/index.js]
+  example: https://agents.muj428.com/examples/langchain-muj428-trust-middleware.mjs
+  note: Cross-provider LangChain/LangGraph middleware that gates consequential tool calls (wrapToolCall) through Trust Reflex. package.json declares publishConfig.access public but the package is not on npm.
+third_party_packages: []
+framework_adapters:
+  note: Single-file Python examples served from agents.muj428.com/integrations/ (developer.json frameworks); not packaged, not on PyPI.
+  files:
+  - {framework: OpenAI Agents SDK, url: 'https://agents.muj428.com/integrations/openai-agents-python.py'}
+  - {framework: Google ADK, url: 'https://agents.muj428.com/integrations/google-adk-python.py'}
+  - {framework: Microsoft Agent Framework, url: 'https://agents.muj428.com/integrations/microsoft-agent-framework-python.py'}
+  - {framework: LangChain / LangGraph, url: 'https://agents.muj428.com/integrations/langchain-python.py', probed: 200}
+  - {framework: CrewAI, url: 'https://agents.muj428.com/integrations/crewai-python.py'}
+  - {framework: LlamaIndex, url: 'https://agents.muj428.com/integrations/llamaindex-python.py'}
+registries_checked:
+- {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=muj428&size=10', result: 'no packages', checked: '2026-09-19'}
+- {registry: pypi, query: 'https://pypi.org/pypi/muj428/json', result: 404, checked: '2026-09-19'}
+- {registry: mcp-registry, query: 'https://registry.modelcontextprotocol.io/v0/servers?search=muj428', result: 'io.github.wmujahid428-web/muj428-trust-layer (remote server listing, not a package)', checked: '2026-09-19'}

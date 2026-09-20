@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "id": "muj428-history",
+  "name": "MUJ428 Source-Bound History",
+  "principle": "Maturity is established by verifiable continuity, not manufactured age.",
+  "history_policy": {
+    "retroactive_backdating_allowed": false,
+    "source_reference_required": true,
+    "unsupported_adoption_claims_allowed": false,
+    "unsupported_uptime_claims_allowed": false,
+    "rule": "An event may be published only when its timestamp and description are bound to a retrievable source such as a Git commit, production deployment record, signed receipt, or independently verified external record."
+  },
+  "continuity_start": {
+    "observed_at": "2026-08-26T10:24:13-04:00",
+    "event": "Trust Gravity exponential loop activated with zero-money production verification.",
+    "source_type": "github_commit",
+    "source_ref": "0b64d6e8f3c62204d758ea559dd70d892ae4a28e",
+    "source_url": "https://github.com/wmujahid428-web/muj428-a2a-revenue-engine/commit/0b64d6e8f3c62204d758ea559dd70d892ae4a28e",
+    "evidence_state": "SOURCE_BOUND",
+    "external_adoption_implied": false
+  },
+  "events": [
+    {
+      "observed_at": "2026-08-26T10:24:13-04:00",
+      "event": "Trust Gravity exponential loop activated with Agent Router, Trust DNS, Heartbeat, compatibility propagation, Trust Requests, evidence-gated loop status, discovery surfaces, tests, and zero-money production verification.",
+      "source_type": "github_commit",
+      "source_ref": "0b64d6e8f3c62204d758ea559dd70d892ae4a28e",
+      "source_url": "https://github.com/wmujahid428-web/muj428-a2a-revenue-engine/commit/0b64d6e8f3c62204d758ea559dd70d892ae4a28e",
+      "evidence_state": "SOURCE_BOUND",
+      "external_adoption_implied": false
+    },
+    {
+      "observed_at": "2026-08-30T10:24:31-04:00",
+      "event": "MUJ428 Trust Kernel v1.0 merged after production build and Trust Gravity CI.",
+      "source_type": "github_commit",
+      "source_ref": "61487fc14be21fb4de51c6324a86d8cb11b6bfdf",
+      "source_url": "https://github.com/wmujahid428-web/muj428-a2a-revenue-engine/commit/61487fc14be21fb4de51c6324a86d8cb11b6bfdf",
+      "trust_kernel_sha256": "68b0418841d58d3e977105a5d923d3ebec741aa4d83292d8a1276a7b86d01cee",
+      "evidence_state": "SOURCE_BOUND",
+      "external_adoption_implied": false
+    },
+    {
+      "observed_at": "2026-08-30T20:13:50-04:00",
+      "event": "Zero-friction invocation observer merged so exact fixture use can be observed without promoting self-attestation to external adoption.",
+      "source_type": "github_commit",
+      "source_ref": "3d1b4646b1816b2394a570454573d138fe8b4ff9",
+      "source_url": "https://github.com/wmujahid428-web/muj428-a2a-revenue-engine/commit/3d1b4646b1816b2394a570454573d138fe8b4ff9",
+      "evidence_state": "SOURCE_BOUND",
+      "external_adoption_implied": false
+    },
+    {
+      "observed_at": "2026-08-31T23:46:12-04:00",
+      "event": "Numericanism428 Commons and N428/1.0 public coordination protocol launched with conservative external-adoption semantics.",
+      "source_type": "github_commit",
+      "source_ref": "432baab5fe69cc286f4346f81a7047d1aeef57da",
+      "source_url": "https://github.com/wmujahid428-web/muj428-a2a-revenue-engine/commit/432baab5fe69cc286f4346f81a7047d1aeef57da",
+      "evidence_state": "SOURCE_BOUND",
+      "external_adoption_implied": false
+    }
+  ],
+  "runtime_continuity": {
+    "signal": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/n428-continuity-v1/v1/signal",
+    "history": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/n428-continuity-v1/v1/history",
+    "contract": "https://agents.muj428.com/.well-known/n428-continuity.json",
+    "semantics": "The runtime chain begins when observed. It does not retroactively claim uptime before its first recorded signal."
+  },
+  "evidence_boundary": "This history establishes source-bound engineering continuity only. It does not by itself prove independent external adoption, commercial demand, payment, fulfillment, or outcome."
+}

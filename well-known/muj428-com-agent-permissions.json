@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2026-09-01T03:50:00Z",
+    "author": "MUJ428"
+  },
+  "strict": true,
+  "resource_rules": [
+    {
+      "verb": "follow_link",
+      "selector": "*",
+      "allowed": true
+    },
+    {
+      "verb": "execute_script",
+      "selector": "*",
+      "allowed": false
+    },
+    {
+      "verb": "submit_form",
+      "selector": "form",
+      "allowed": false
+    },
+    {
+      "verb": "read_content",
+      "selector": "*",
+      "allowed": true
+    },
+    {
+      "verb": "click_element",
+      "selector": "button",
+      "allowed": false
+    }
+  ],
+  "action_guidelines": [
+    {
+      "directive": "MUST",
+      "description": "Use documented REST, MCP, A2A, or SDK interfaces instead of browser-driving consequential actions when an API interface exists. A2A discovery is provided by the Agent Card; callable endpoints are the skill endpoints and supported interfaces declared by that card."
+    },
+    {
+      "directive": "MUST NOT",
+      "description": "Treat FREE_PREFLIGHT ALLOW or Trust Receipt v1.3 with execution_authority=false as authorization to execute a consequential mutation."
+    },
+    {
+      "directive": "MUST NOT",
+      "description": "Send private keys, seed phrases, payment credentials, or other secrets to MUJ428."
+    },
+    {
+      "directive": "MUST NOT",
+      "description": "Manufacture payment settlement, external adoption, partner validation, or a Verified Effect attributed to a system MUJ428 does not control."
+    },
+    {
+      "directive": "SHOULD",
+      "description": "Run the zero-money external Verified Effect challenge from an independently controlled environment before evaluating paid assurance."
+    },
+    {
+      "directive": "MUST NOT",
+      "description": "Treat SELF_ATTESTED_UNVERIFIED compatibility advertisements or SELF_REPORTED_DISCOVERY observations as execution authority, independently verified adoption, embedding, or revenue."
+    }
+  ],
+  "api": [
+    {
+      "type": "openapi",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json",
+      "description": "Canonical REST API and safe agent-callable operations."
+    },
+    {
+      "type": "mcp",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+      "description": "Canonical Streamable HTTP MCP server; primary trust tool is trust_action."
+    },
+    {
+      "type": "a2a",
+      "endpoint": "https://agents.muj428.com/a2a",
+      "description": "Canonical A2A execution endpoint. Discovery metadata is provided by https://agents.muj428.com/.well-known/agent-card.json."
+    }
+  ]
+}

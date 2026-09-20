@@ -1,0 +1,15 @@
+{
+  "spec": "agent402-service-manifest/1",
+  "version": 1,
+  "name": "MUJ428 Trust Layer",
+  "description": "Machine-paid evidence and decision services for agents: verify evidence before payment or settlement, validate counterparties, check milestone evidence before release, and assess trust before consequential action.",
+  "resources": [
+    "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/evidence-signal",
+    "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/reputation-check",
+    "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/milestone-attestation",
+    "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/trust-layer-report",
+    "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-x402/v1/transaction-assurance"
+  ],
+  "contact": "sales@muj428.com",
+  "verifier": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/agent-transaction-verifier/spec"
+}

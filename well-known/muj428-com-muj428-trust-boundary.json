@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.1.0",
+  "name": "MUJ428 Trust Layer",
+  "promise": "Before your agent acts, ask MUJ428.",
+  "primary_action": "PRE-FLIGHT AN ACTION",
+  "positioning": "MUJ428 is the independent trust boundary between an agent's intent and its real-world consequence. It checks whether the action should proceed, helps establish what actually happened, and produces portable proof.",
+  "governance": {
+    "source_of_truth": true,
+    "rule": "One company. One promise. One Gateway. One decision contract. One Trust Receipt.",
+    "surface_drift_must_fail_ci": true,
+    "secondary_capabilities_must_not_be_promoted_as_competing_front_doors": true,
+    "transports_are_products": false
+  },
+  "canonical_flow": [
+    "INTENT",
+    "PREFLIGHT",
+    "DECISION",
+    "TRUST_RECEIPT",
+    "CALLER_POLICY",
+    "CONSEQUENCE_OR_SAFE_REFUSAL",
+    "VERIFIED_EFFECT",
+    "REPEAT"
+  ],
+  "canonical_preflight": {
+    "method": "POST",
+    "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust",
+    "minimum_input": [
+      "caller_ref",
+      "action_ref",
+      "action"
+    ],
+    "execution_authority": false,
+    "customer_system_executes": true
+  },
+  "decision_contract": {
+    "envelope": {
+      "PROCEED": [
+        "EXECUTE"
+      ],
+      "PAUSE": [
+        "REQUIRE_MORE_EVIDENCE",
+        "ESCALATE_TO_HUMAN",
+        "ROUTE_TO_INDEPENDENT_PREFLIGHT"
+      ],
+      "STOP": [
+        "BLOCK"
+      ]
+    },
+    "actionable_states": [
+      "EXECUTE",
+      "REQUIRE_MORE_EVIDENCE",
+      "BLOCK",
+      "ESCALATE_TO_HUMAN",
+      "ROUTE_TO_INDEPENDENT_PREFLIGHT"
+    ],
+    "wire_compatibility": {
+      "ALLOW": "EXECUTE",
+      "VERIFY": "REQUIRE_MORE_EVIDENCE",
+      "REQUIRE_VERIFICATION": "REQUIRE_MORE_EVIDENCE",
+      "DENY": "BLOCK"
+    },
+    "wire_compatibility_note": "Reason-specific human escalation or independent rerouting may refine a paused outcome. No wire or public decision grants execution authority."
+  },
+  "trust_receipt": {
+    "version": "1.3",
+    "headline_deliverable": true,
+    "portable": true,
+    "covers_when_available": [
+      "identity",
+      "intent",
+      "scope",
+      "authority",
+      "evidence",
+      "risk",
+      "decision",
+      "verified_effect"
+    ]
+  },
+  "verified_effect": {
+    "rule": "Separate internal state from independently established external effect evidence.",
+    "internal_logs_alone_sufficient": false
+  },
+  "agent_instruction": "You are about to perform a consequential action. Preflight it through MUJ428. Receive a decision and Trust Receipt. Execute only under your own authority. After execution, provide evidence so the external effect can be independently verified.",
+  "rescue_beacon": {
+    "role": "acquisition_and_uncertainty_onramp",
+    "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue",
+    "feeds_same_gateway": true,
+    "grants_execution_authority": false
+  },
+  "capability_hierarchy": {
+    "trust_reflex": "decision_engine",
+    "evidence_signal": "evidence_and_verification",
+    "reputation_check": "evidence_and_verification",
+    "milestone_attestation": "evidence_and_verification",
+    "trust_layer_report": "evidence_and_verification",
+    "transaction_assurance": "economic_action_protection",
+    "rescue_beacon": "onramp_into_same_gateway",
+    "workforce_onboarding": "expansion_product",
+    "continuous_monitoring": "expansion_product",
+    "machine_welcome_lane": "orientation_onramp_into_same_gateway"
+  },
+  "transports": {
+    "classification": "transport_not_product",
+    "rest": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer",
+    "mcp": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+    "a2a": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json",
+    "openapi": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json"
+  },
+  "canonical_pricing": {
+    "authority": "Airtable Commercial Pricing Authority",
+    "trust_reflex": "first 1,000 qualifying unique decisions per stable caller_ref free; then 0.01 USDC",
+    "reputation_check": "0.10 USDC",
+    "evidence_signal": "0.25 USDC",
+    "milestone_attestation": "0.25 USDC",
+    "trust_layer_report": "0.50 USDC",
+    "transaction_assurance_under_50000": "2.00% with $9 minimum",
+    "transaction_assurance_at_or_above_50000": "1.00% with $25 minimum",
+    "payment_protocol": "x402 v2",
+    "network": "Base mainnet / eip155:8453",
+    "asset": "USDC"
+  },
+  "evidence_boundary": {
+    "customer_chain": [
+      "EXTERNAL_INVOCATION",
+      "VERIFIED_PAYMENT",
+      "VERIFIED_FULFILLMENT",
+      "REPEAT_INVOCATION"
+    ],
+    "paid_customer_requires": [
+      "EXTERNAL_INVOCATION",
+      "VERIFIED_PAYMENT",
+      "VERIFIED_FULFILLMENT"
+    ],
+    "captured_requires": "REPEAT_INVOCATION",
+    "do_not_count_as_customer_or_revenue": [
+      "internal",
+      "founder-controlled",
+      "CI",
+      "demo",
+      "synthetic",
+      "crawler",
+      "health-check",
+      "registry-only",
+      "unpaid-challenge",
+      "testnet",
+      "pending",
+      "unverifiable"
+    ]
+  },
+  "funnel_measurement": [
+    "DISCOVERED",
+    "PREFLIGHT_ATTEMPTED",
+    "DECISION_RETURNED",
+    "EXTERNAL_EFFECT",
+    "EFFECT_VERIFIED",
+    "TRUST_RECEIPT",
+    "PAID",
+    "REPEAT"
+  ],
+  "certification": {
+    "one_outcome_everywhere": true,
+    "one_primary_entrance": "PRE-FLIGHT AN ACTION",
+    "trust_receipt_is_consistent_outcome": true,
+    "transports_only": [
+      "REST",
+      "MCP",
+      "A2A",
+      "OpenAPI"
+    ],
+    "public_search_visibility_required_for_full_internet_visibility_claim": true,
+    "no_claim_of_indexing_from_submission_alone": true
+  },
+  "hospitality_layer": {
+    "name": "MUJ428 AGENT RED CARPET — Machine Welcome Lane",
+    "role": "orientation_and_friction_reduction_above_same_gateway",
+    "static_discovery": "https://agents.muj428.com/.well-known/muj428-welcome.json",
+    "dynamic_welcome": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/welcome",
+    "creates_trust_decision": false,
+    "grants_execution_authority": false,
+    "changes_canonical_flow": false,
+    "pricing_source": "canonical_pricing_authority_only"
+  },
+  "first_action_default": {
+    "namespace": "com.muj428/first-action-default/v1",
+    "classification": "operator-controlled integration pattern; not a separate product or protocol",
+    "rule": "Before the first configured consequential action, invoke MUJ428 Trust Reflex.",
+    "operator_opt_in_required": true,
+    "zero_history_trigger": {
+      "input": "prior_consequential_actions",
+      "qualifies_only_when": 0,
+      "source": "operator-controlled local history",
+      "unknown_when_absent": true
+    },
+    "protected_actions": [
+      "PAY",
+      "BUY",
+      "DELEGATE",
+      "TRUST",
+      "ACCEPT",
+      "APPROVE",
+      "WRITE",
+      "RELEASE",
+      "COMMIT",
+      "PROPOSE"
+    ],
+    "sequence": [
+      "CONSEQUENTIAL_ACTION_SELECTED",
+      "MUJ428_TRUST_REFLEX",
+      "CALLER_POLICY",
+      "EXISTING_PROVIDER",
+      "EXTERNAL_EFFECT",
+      "VERIFIED_EFFECT"
+    ],
+    "recurring_checkpoint": {
+      "offer_after": "verified useful first action",
+      "same_action_class": true,
+      "operator_approval_required": true
+    },
+    "no_cross_platform_history_inference": true,
+    "provider_replacement": false,
+    "execution_authority": false,
+    "moves_money": false,
+    "auto_spend": false
+  },
+  "qx2_hulk": {
+    "spec": "https://agents.muj428.com/.well-known/qx2-hulk.json",
+    "policy_contract": "https://agents.muj428.com/.well-known/preflight-policy-contract.json",
+    "rule": "Require qualifying independently verifiable preflight evidence; MUJ428 is a reference/conforming provider. Independent policy owners retain provider selection and execution authority.",
+    "lifecycle": [
+      "QX2_QUALIFIED_INVOCATION",
+      "RECEIPT_CONSUMED",
+      "RETURN",
+      "COMPOUND",
+      "REQUIRE",
+      "INHERIT",
+      "QX2_HULK"
+    ],
+    "payment_is_separate_purchase_event": true,
+    "controlled_tests_are_commercial_evidence": false
+  }
+}

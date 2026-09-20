@@ -1,0 +1,149 @@
+{
+  "agentsJson": "0.2.0",
+  "info": {
+    "title": "MUJ428 Trust Layer",
+    "version": "1.8.3",
+    "description": "Machine-native Trust Reflex and x402 trust-service flows through the canonical Supabase production facade."
+  },
+  "sources": [
+    {
+      "id": "muj428",
+      "path": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json"
+    }
+  ],
+  "flows": [
+    {
+      "id": "run_trust_reflex",
+      "title": "Run Trust Reflex before consequential execution",
+      "description": "First 1,000 qualifying unique decisions per stable caller_ref are free. Replays do not double-count. After quota, the same operation returns an exact 0.01 USDC x402 challenge.",
+      "actions": [
+        {
+          "id": "trust_action",
+          "sourceId": "muj428",
+          "operationId": "trustAction"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "id": "buy_evidence_signal",
+      "title": "Buy Evidence Signal",
+      "description": "POST without a payment signature to receive the exact 0.25 USDC x402 challenge; a caller may retry with its independently authorized valid signature for synchronous settlement and fulfillment.",
+      "actions": [
+        {
+          "id": "evidence_signal",
+          "sourceId": "muj428",
+          "operationId": "evidenceSignal"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "id": "buy_reputation_check",
+      "title": "Buy Agent Reputation Check",
+      "description": "Machine-native 0.10 USDC x402 service.",
+      "actions": [
+        {
+          "id": "reputation_check",
+          "sourceId": "muj428",
+          "operationId": "reputationCheck"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "id": "buy_milestone_attestation",
+      "title": "Buy Milestone Evidence Attestation",
+      "description": "Machine-native 0.25 USDC x402 service.",
+      "actions": [
+        {
+          "id": "milestone_attestation",
+          "sourceId": "muj428",
+          "operationId": "milestoneAttestation"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "id": "buy_trust_layer_report",
+      "title": "Buy Trust Layer Report",
+      "description": "Machine-native 0.50 USDC x402 service.",
+      "actions": [
+        {
+          "id": "trust_layer_report",
+          "sourceId": "muj428",
+          "operationId": "trustLayerReport"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "id": "buy_transaction_assurance",
+      "title": "Buy Transaction Assurance",
+      "description": "Dynamic exact x402 fee: below $50,000 = 2.00% with $9 minimum; $50,000+ = 1.00% with $25 minimum.",
+      "actions": [
+        {
+          "id": "transaction_assurance",
+          "sourceId": "muj428",
+          "operationId": "transactionAssurance"
+        }
+      ],
+      "links": [],
+      "fields": {
+        "parameters": [],
+        "responses": {
+          "success": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "canonical_discovery": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/discover",
+  "mcp": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+  "network": "eip155:8453",
+  "asset": "USDC",
+  "auto_spend": false,
+  "custody_of_transaction_principal": false
+}
+

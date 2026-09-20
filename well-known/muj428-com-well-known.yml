@@ -1,0 +1,139 @@
+generated: '2026-09-19'
+method: probed
+source: live probes of /.well-known/ on every MUJ428 host (agents.muj428.com, muj428.com, www.muj428.com, wepmhfjzckclvywolrek.supabase.co)
+summary: >-
+  agents.muj428.com is one of the richest /.well-known/ trees in the catalog: an RFC 9727 api-catalog served
+  with the correct application/linkset+json media type and profile, an MCP server.json at /.well-known/mcp.json,
+  an A2A agent card at both the canonical and legacy paths, an agent402 service manifest at /.well-known/x402,
+  and a dozen provider-specific documents (Trust Kernel pointer, payment rails, payment proof, trust boundary,
+  trust gravity, product architecture, N428 manifests, agent-permissions, a legacy MCP server card). What it
+  does NOT serve: security.txt (no SecurityTxt pointer), OIDC discovery, RFC 8414 authorization-server or
+  RFC 9728 protected-resource metadata (no OAuth anywhere), ai-plugin.json, apis.json. The apex muj428.com and
+  www.muj428.com 302 every path to a Porkbun parking page (muj428-com.l.ink) that 404s, and the Supabase
+  project root 404s everything — the facade's agent card lives under the function path, not a well-known root.
+pointer_basis: >-
+  WellKnown pointer emitted on the strength of the 200s on agents.muj428.com (api-catalog, mcp.json, agent-card.json
+  and the rest). APICatalog pointer emitted for the RFC 9727 document. SecurityTxt pointer NOT emitted — RFC 9116
+  is unimplemented on every host (404 at /.well-known/security.txt and /security.txt).
+false_positive_watch: >-
+  agents.muj428.com is NOT a catch-all: a negative-control path (/.well-known/apievangelist-negative-control-7f3a9c.json)
+  and every unimplemented standard path return a real, small HTML 404 (144-193 bytes). muj428.com / www.muj428.com
+  answer 302 for everything and must never be read as hits.
+hosts:
+- host: https://agents.muj428.com
+  documents:
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
+    file: muj428-com-api-catalog.json
+    note: RFC 9727 linkset; five anchors (the website, the REST facade with service-desc -> openapi.json, the MCP server with service-desc -> mcp.json, the A2A card, the trust-gravity service) plus status links to /health.
+  - path: /.well-known/mcp.json
+    status: 200
+    content_type: application/json
+    file: muj428-com-mcp.json
+    note: MCP server.json (static.modelcontextprotocol.io 2025-12-11 schema) naming the canonical streamable-http remote and 12 tool names.
+  - path: /.well-known/agent-card.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/muj428-com-agent-card.json
+    note: A2A agent card — graded in a2a/muj428-com-a2a.yml (flavored; no protocolVersion).
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    file: ../a2a/muj428-com-agent-legacy.json
+    note: Legacy path answers with a DIFFERENT, older-shaped document (capabilities as an array).
+  - path: /.well-known/x402
+    status: 200
+    content_type: application/octet-stream
+    file: muj428-com-x402.json
+    note: agent402-service-manifest/1 listing the five paid x402 resources, contact sales@muj428.com and an independent verifier URL. Served without a JSON media type.
+  - path: /.well-known/muj428-trust-kernel.json
+    status: 200
+    file: muj428-com-muj428-trust-kernel.json
+    note: Canonical pointer + SHA-256 binding for the Trust Kernel v1.0 at /trust-kernel.json.
+  - path: /.well-known/payment-rails.json
+    status: 200
+    file: muj428-com-payment-rails.json
+  - path: /.well-known/payment-proof.json
+    status: 200
+    file: muj428-com-payment-proof.json
+  - path: /.well-known/muj428-trust-boundary.json
+    status: 200
+    file: muj428-com-muj428-trust-boundary.json
+  - path: /.well-known/muj428-trust-gravity.json
+    status: 200
+    file: muj428-com-muj428-trust-gravity.json
+  - path: /.well-known/muj428-product-architecture.json
+    status: 200
+    file: muj428-com-muj428-product-architecture.json
+  - path: /.well-known/n428.json
+    status: 200
+    file: muj428-com-n428.json
+    note: N428/2.0 coordination-protocol manifest; sibling documents n428-maturity.json, n428-casebook.json, n428-continuity.json, muj428-history.json and muj428-welcome.json also 200 (not all saved).
+  - path: /.well-known/agent-permissions.json
+    status: 200
+    file: muj428-com-agent-permissions.json
+    note: Browser-agent permission rules (strict; follow_link/read_content allowed, execute_script/submit_form/click_element denied) with MUST/MUST NOT action guidelines.
+  - path: /.well-known/mcp/server-card.json
+    status: 200
+    file: muj428-com-mcp-server-card.json
+    note: Legacy-scanner MCP server card with full tool schemas; the current card is at /mcp/server-card (application/mcp-server-card+json).
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/apis.json
+    status: 404
+  - path: /.well-known/apievangelist-negative-control-7f3a9c.json
+    status: 404
+    note: Negative control.
+- host: https://muj428.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 302
+    note: 302 -> https://muj428-com.l.ink/.well-known/security.txt (404, openresty). Every path on this host 302s to the Porkbun parking page; the root itself renders "A Brand New Domain! Brought to you by Porkbun".
+  - path: /.well-known/openid-configuration
+    status: 302
+  - path: /.well-known/oauth-authorization-server
+    status: 302
+  - path: /.well-known/oauth-protected-resource
+    status: 302
+  - path: /.well-known/api-catalog
+    status: 302
+  - path: /.well-known/ai-plugin.json
+    status: 302
+  - path: /.well-known/agent-card.json
+    status: 302
+    note: Followed -> 404.
+  - path: /.well-known/agent.json
+    status: 302
+    note: Followed -> 404.
+- host: https://www.muj428.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 302
+    note: Same Porkbun redirect as the apex; followed -> 404.
+- host: https://wepmhfjzckclvywolrek.supabase.co
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: The MCP resource server publishes no RFC 9728 metadata — consistent with the server needing no OAuth.
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+    note: The provider-designated canonical card is at /functions/v1/trust-layer/.well-known/agent-card.json (200) — a function path, not the host's well-known root.

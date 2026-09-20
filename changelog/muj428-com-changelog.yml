@@ -1,0 +1,60 @@
+generated: '2026-09-19'
+method: searched
+source: https://agents.muj428.com/.well-known/muj428-history.json
+checked: '2026-09-19'
+summary: >-
+  MUJ428 publishes no /changelog page (404) and no feed, but it does publish a dated, machine-readable "source-bound
+  history" whose stated policy is that an event may be listed only when its timestamp is bound to a retrievable
+  source (a Git commit, deployment record or signed receipt) and that retroactive backdating and unsupported
+  adoption/uptime claims are forbidden. Four events are listed, 2026-08-26 to 2026-08-31, each citing a commit in
+  github.com/wmujahid428-web/muj428-a2a-revenue-engine — a repository that returned 404 to this pass (private or
+  removed), so the commit URLs cannot be independently opened. Release versions are tracked separately in the
+  discovery manifests (1.8.3 current); the history does not map events to manifest versions. Verbatim copy:
+  changelog/muj428-com-history.json.
+scheme:
+  api_versioning: manifest semver + /v1 path prefix
+  note: See lifecycle/muj428-com-lifecycle.yml — mirror OpenAPI 1.8.2 vs facade 1.8.3; policy epoch 2026-08-30.1.
+current_version:
+  manifest: 1.8.3
+  openapi_mirror: 1.8.2
+  openapi_facade: 1.8.3
+  policy_epoch: 2026-08-30.1
+  receipt_version: '1.3'
+  pricing_schema: 2.3.1 (effective 2026-08-29, review 2026-10-20)
+feeds:
+  rss: null
+  atom: null
+  json: https://agents.muj428.com/.well-known/muj428-history.json
+entries:
+- date: '2026-08-31'
+  version: null
+  type: addition
+  breaking: false
+  highlights:
+  - Numericanism428 Commons and the N428/1.0 public coordination protocol launched (N428/2.0 manifest revision 2026-09-05.1 is what /.well-known/n428.json serves today).
+  source: github_commit (repository not publicly reachable)
+- date: '2026-08-30'
+  version: null
+  type: addition
+  breaking: false
+  highlights:
+  - MUJ428 Trust Kernel v1.0 merged after production build and Trust Gravity CI (kernel SHA-256 68b0418841d58d3e977105a5d923d3ebec741aa4d83292d8a1276a7b86d01cee, bound in /.well-known/muj428-trust-kernel.json).
+  - Zero-friction invocation observer merged so fixture use can be observed without promoting self-attestation to external adoption.
+  source: github_commit (repository not publicly reachable)
+- date: '2026-08-26'
+  version: null
+  type: addition
+  breaking: false
+  highlights:
+  - Trust Gravity exponential loop activated — Agent Router, Trust DNS, Heartbeat, compatibility propagation, Trust Requests, evidence-gated loop status, discovery surfaces, tests and zero-money production verification. Recorded by the provider as continuity_start.
+  source: github_commit (repository not publicly reachable)
+- date: '2026-08-10'
+  version: 1.0.0 / 1.6.2
+  type: listing
+  breaking: false
+  highlights:
+  - io.github.wmujahid428-web/muj428-trust-layer published to the official MCP registry (two versions, remote https://agents.muj428.com/mcp).
+  source: https://registry.modelcontextprotocol.io/v0/servers?search=muj428 (publishedAt 2026-08-10T20:52:40Z)
+observed_by_api_evangelist:
+- date: '2026-09-19'
+  note: First capture. Two OpenAPIs one release apart (1.8.2 mirror with 24 operations and operationIds; 1.8.3 facade with 20 operations and no operationIds); two MCP servers (1.8.3 canonical with 14 tools; 1.7.1 facade with 2). Future passes should diff against openapi/_original/ and mcp/muj428-com-mcp-tools.json.

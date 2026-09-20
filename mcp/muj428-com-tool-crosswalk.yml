@@ -1,0 +1,136 @@
+generated: '2026-09-19'
+method: derived
+source: >-
+  Derived by binding the LIVE MCP tools/list (mcp/muj428-com-mcp-tools.json, 14 tools, anonymous, fetched
+  2026-09-19 from the canonical Supabase endpoint) and the A2A agent card skills (a2a/muj428-com-agent-card.json,
+  11 skills) to the operationIds of the provider's own OpenAPI 3.1.0 mirror
+  (openapi/muj428-com-trust-layer-openapi.json, 24 operations, served at https://agents.muj428.com/openapi.json).
+  The provider's own agents.json (openapi/_original/muj428-com-agents.json, agentsJson 0.2.0) also binds flows
+  to these operationIds (trustAction, evidenceSignal, reputationCheck, milestoneAttestation, ...), which
+  corroborates the REST rows below.
+purpose: >-
+  Make the MCP tool and the A2A skill first-class discovery units bound to the REST operation that backs them.
+  MUJ428's three agent surfaces are projections of ONE facade: nothing is MCP-only in the data sense, but two
+  tools are convenience wrappers with no single REST operation, and six REST operations have no tool.
+surfaces:
+  rest_openapi: openapi/muj428-com-trust-layer-openapi.json          # 24 operations; canonical facade also publishes a 20-op variant (openapi/_original/muj428-com-trust-layer-openapi-facade.json) adding /v1/welcome and /v1/payments/capabilities
+  mcp: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp   # tools/list OPEN (anonymous); inputSchemas are real
+  mcp_facade: https://agents.muj428.com/mcp                             # 2 tools, older build, registry-listed
+  a2a: https://agents.muj428.com/a2a                                    # JSON-RPC, requires A2A-Extensions header naming the Trust Reflex extension
+  graphql: null
+
+crosswalk:
+  - tool: trust_action
+    a2a_skill: trust-action
+    category: preflight
+    rest: [trustAction]
+    binding: rest
+    confidence: high
+    note: POST /v1/trust. The MCP inputSchema and the OpenAPI TrustAction schema share caller_ref, action_ref, action (enum of ten), amount_usd, irreversible, external, unknown_counterparty, sensitive_data, enforcement_boundary, evidence_state, closing_evidence_observable, required_evidence_observed. The facade tool additionally accepts trajectory inputs (action_history, trajectory, previous_actions, previous_trust_receipts) the REST schema lists as previous_trust_receipts only.
+  - tool: rescue_agent_before_consequence
+    a2a_skill: agent-rescue-beacon
+    category: rescue
+    rest: [rescueAgentBeforeConsequence]
+    binding: rest
+    confidence: high
+    note: POST /v1/rescue. Identical required set (caller_ref, action_ref, objective, uncertainty) and trigger enum in both schemas.
+  - tool: invoke_trust_service
+    a2a_skill: [evidence-signal, agent-reputation-check, milestone-attestation, trust-layer-report, transaction-assurance]
+    category: paid-services
+    rest: [evidenceSignal, reputationCheck, milestoneAttestation, trustLayerReport, transactionAssurance]
+    binding: rest
+    confidence: medium
+    note: One generic bridge tool whose `service` parameter selects among the five x402-paid POST /v1/* operations; `request` is passed through as the body and `payment_signature` becomes the PAYMENT-SIGNATURE retry. The REST spec declares no requestBody for these five operations, so the per-service input shape is documented only in the provider's commercial-contract.json input_schema_ref hints.
+  - tool: get_service_catalog
+    category: discovery
+    rest: [getServiceCatalog]
+    binding: rest
+    confidence: high
+  - tool: get_payment_rails
+    a2a_skill: discover-payment-plans
+    category: payments-discovery
+    rest: [getPaymentPlans]
+    binding: rest
+    confidence: high
+    note: GET /.well-known/payment-rails.json on the facade; the canonical facade spec also exposes GET /v1/payments/capabilities with the same body.
+  - tool: resolve_trust_route
+    a2a_skill: resolve-trust-route
+    category: routing
+    rest: [resolveTrustRoute, resolveTrustRequirements]
+    binding: rest
+    confidence: high
+    note: POST /v1/route (Agent Router) and POST /v1/trust-dns/resolve (Trust DNS); the tool description names both roles.
+  - tool: get_trust_heartbeat
+    a2a_skill: trust-heartbeat
+    category: operations
+    rest: [getTrustHeartbeat]
+    binding: rest
+    confidence: high
+  - tool: find_trust_capabilities
+    category: directory
+    rest: [findTrustCapabilities]
+    binding: rest
+    confidence: high
+  - tool: publish_trust_request
+    a2a_skill: trust-requests
+    category: directory
+    rest: [publishTrustRequest]
+    binding: rest
+    confidence: high
+  - tool: observe_trust_compatibility
+    category: telemetry
+    rest: [observeTrustCompatibility]
+    binding: rest
+    confidence: high
+  - tool: select_payment_rail
+    category: payments-discovery
+    rest: [selectPaymentPlan]
+    binding: rest
+    confidence: high
+    note: Same rail / mode / asset / network / base_rail / authorization_protocol inputs as POST /v1/payments/select.
+  - tool: get_trust_layer_pricing
+    category: pricing
+    rest: [getPricing]
+    binding: rest
+    confidence: high
+  - tool: get_capabilities
+    category: discovery
+    rest: [discoverTrustLayer]
+    binding: rest
+    confidence: high
+    note: GET /discover; the canonical facade also serves /capabilities.json with the same capability list.
+
+mcp_only:
+  - tool: select_assurance_tier
+    reason: A fee calculator (transaction_value_usd -> exact Transaction Assurance fee under the 2%/$9 and 1%/$25 tiers). No REST operation performs the calculation without charging; the equivalent is reading getPricing and applying the published tiers client-side.
+
+a2a_only: []
+
+rest_only:
+  - operationId: getHealth
+    note: GET /health — production readiness JSON; no tool.
+  - operationId: registerTrustCompatibility
+    note: POST /v1/compatibility (202) — self-attested compatibility registration; the tools cover search (find_trust_capabilities) and observation but not registration.
+  - operationId: listTrustRequests
+    note: GET /v1/trust-requests — the tool publishes but does not list.
+  - operationId: getTrustGravityStatus
+    note: GET /v1/loop/status.
+  - operationId: getPaymentProof
+    note: GET /.well-known/payment-proof.json.
+  - operationId: createContinuousTrustMonitor
+    note: POST /v1/monitor — Continuous Trust Monitoring (expansion beta) has no MCP tool and no A2A skill yet.
+
+facade_only:
+  - endpoint: https://agents.muj428.com/mcp
+    tools: [trust_action, get_evidence_signal_requirements]
+    note: Older 1.7.1 build; get_evidence_signal_requirements is a pricing read (binds to getPricing) not present on the canonical server under that name.
+
+coverage:
+  mcp_tools: 14
+  mcp_tools_bound_to_rest: 13
+  mcp_only: 1
+  a2a_skills: 11
+  a2a_skills_bound_to_rest: 11
+  rest_operations: 24
+  rest_operations_with_tool_or_skill: 18
+  rest_only: 6

@@ -1,0 +1,185 @@
+generated: '2026-09-19'
+method: probed
+source: https://agents.muj428.com/.well-known/agent-card.json
+card:
+  file: a2a/muj428-com-agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: agents.muj428.com
+  note: >-
+    Served from agents.muj428.com, the provider's own product host (the apex muj428.com 302s every path to a
+    Porkbun "A Brand New Domain!" parking page at muj428-com.l.ink, so nothing is served there). The legacy
+    /.well-known/agent.json on the same host ALSO answers 200 with a different, older-shaped JSON document
+    (capabilities as an array, endpoints map) — saved verbatim as a2a/muj428-com-agent-legacy.json and not
+    graded. A negative-control path (/.well-known/apievangelist-negative-control-7f3a9c.json) returns a real
+    163-byte HTML 404, and /.well-known/security.txt, /openid-configuration, /oauth-authorization-server,
+    /oauth-protected-resource, /ai-plugin.json and /apis.json all 404, so the 200 on agent-card.json is a
+    served document and not an SPA catch-all. Ownership is not in question: provider.organization is
+    "MUJ428 LLC" with provider.url https://agents.muj428.com, and the same host's RFC 9727 api-catalog lists
+    this card as "MUJ428 public A2A Agent Card mirror with Trust Kernel discovery". The provider's own
+    api-catalog, developer.json and AGENTS.md name a SECOND copy — "canonical production A2A Agent Card" —
+    at https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json (a
+    Supabase edge-function path, not an RFC 8615 well-known root); it is saved verbatim as
+    a2a/muj428-com-agent-card-facade.json for reference. Both copies fail the same hard check
+    (no protocolVersion), so the grade below holds for either.
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://agents.muj428.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json; charset=UTF-8
+  body_bytes: 15319
+  body_parses_as: JSON object with AgentCard shape (name, description, version, provider, capabilities, skills, defaultInputModes, defaultOutputModes, supportedInterfaces, documentationUrl, productHierarchy)
+  corroborating_probes:
+  - url: https://agents.muj428.com/.well-known/agent.json
+    http_status: 200
+    content_type: application/json; charset=utf-8
+    body_bytes: 5244
+    note: Older-shaped document (capabilities is an ARRAY of strings; endpoints map; no skills). Saved as a2a/muj428-com-agent-legacy.json; not graded.
+  - url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json
+    http_status: 200
+    content_type: application/json; charset=utf-8
+    body_bytes: 9848
+    note: The provider-designated canonical production card (7 skills with per-skill endpoint, payment block, endpoints map). Also lacks protocolVersion and url.
+  - url: https://muj428.com/.well-known/agent-card.json
+    http_status: 302
+    note: Redirects to https://muj428-com.l.ink/.well-known/agent-card.json, which returns 404 (openresty). www.muj428.com behaves identically.
+  - url: https://wepmhfjzckclvywolrek.supabase.co/.well-known/agent-card.json
+    http_status: 404
+    note: Nothing at the Supabase project root; the card lives only under the function path.
+  - url: https://agents.muj428.com/.well-known/apievangelist-negative-control-7f3a9c.json
+    http_status: 404
+    note: Negative control — a real 404, so agents.muj428.com is not a catch-all.
+  - url: https://agents.muj428.com/a2a
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tasks/get","params":{"id":"apievangelist-nonexistent-probe"}}'
+    http_status: 400
+    response: '{"jsonrpc":"2.0","id":1,"error":{"code":-32600,"message":"Activate https://agents.muj428.com/extensions/trust-reflex/v1 using the A2A-Extensions header."}}'
+    note: A real JSON-RPC 2.0 responder on the declared JSONRPC interface; it requires the Trust Reflex extension to be activated via the A2A-Extensions header before serving any method. No message was sent and nothing was purchased.
+  - url: https://agents.muj428.com/extensions/trust-reflex/v1
+    http_status: 200
+    note: The extension descriptor (version 1.1.0) — activation header A2A-Extensions (legacy X-A2A-Extensions), rpcMethods [trust/evaluate], protocolVersions [1.0, 0.3].
+  - url: https://a2aregistry.org
+    note: The card was first seen as one of 415 agents listed on a2aregistry.org (fetched 2026-09-19, author "MUJ428 LLC", agent "MUJ428 Trust Reflex"), which is how this provider entered the harvest backlog. The registry listing was the lead; the card above was fetched directly from the provider's host.
+agent_card:
+  name: MUJ428 Trust Reflex
+  description: >-
+    MUJ428 — VERIFY BEFORE ACT. Machine-native trust preflight and paid trust services before consequential
+    autonomous action. Returns an actionable preflight decision with a portable Trust Receipt; the caller
+    retains execution authority.
+  url: null
+  version: 1.8.3
+  protocol_version: null
+  preferred_transport: null
+  provider:
+    organization: MUJ428 LLC
+    url: https://agents.muj428.com
+  capabilities:
+    streaming: false
+    push_notifications: false
+    extended_agent_card: false
+    extensions:
+    - uri: https://agents.muj428.com/.well-known/muj428-trust-kernel.json
+      required: false
+      description: MUJ428 Trust Kernel v1.0 — "BEFORE CONSEQUENCE -> CALL MUJ428"; params carry the canonical kernel URL, version 1.0 and its SHA-256.
+    - uri: https://agents.muj428.com/extensions/trust-reflex/v1
+      required: false
+      description: Trust Reflex extension — preflight endpoint, the ten-action vocabulary, four decisions, receipt version 1.3, free-quota and x402 pricing parameters, payment discovery/proof URLs.
+  supported_interfaces:
+  - protocol_binding: JSONRPC
+    protocol_version: '1.0'
+    url: https://agents.muj428.com/a2a
+  - note: Additional entries in the card's supportedInterfaces[] carry provider-specific bindings; see the verbatim file.
+  default_input_modes: [application/json, text/plain]
+  default_output_modes: [application/json]
+  security_schemes: null
+  security: null
+  documentation_url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/discover
+  icon_url: null
+  skill_count: 11
+  skills:
+  - {id: agent-rescue-beacon, name: MUJ428 Agent Rescue Beacon, tags: [agent-rescue, consequential-uncertainty, trust-kernel, preflight]}
+  - {id: trust-action, name: Trust Reflex, tags: [trust, preflight, safety, verify-before-act], price_stated: 'first 1,000 qualifying decisions per caller_ref 0.00 USDC; then 0.01 USDC via x402 after explicit caller authorization'}
+  - {id: evidence-signal, name: Evidence Signal, tags: [evidence, verification, x402], price_stated: 0.25 USDC}
+  - {id: agent-reputation-check, name: Agent Reputation Check, tags: [reputation, counterparty, x402], price_stated: 0.10 USDC}
+  - {id: milestone-attestation, name: Milestone Evidence Attestation, tags: [milestone, evidence, x402], price_stated: 0.25 USDC}
+  - {id: trust-layer-report, name: Trust Layer Report, tags: [trust, risk, report], price_stated: 0.50 USDC}
+  - {id: transaction-assurance, name: Transaction Assurance, tags: [transaction, assurance, x402], price_stated: '2% ($9 min) under $50,000; 1% ($25 min) at or above'}
+  - {id: discover-payment-plans, name: Discover MUJ428 payment plans, tags: [payments, x402, mpp, stablecoin, ap2]}
+  - {id: resolve-trust-route, name: MUJ428 Agent Router, tags: [trust-routing, trust-dns, preflight]}
+  - {id: trust-heartbeat, name: Trust Heartbeat, tags: [heartbeat, policy, compatibility]}
+  - {id: trust-requests, name: Trust Requests, tags: [discovery, matching, infrastructure]}
+  skill_invocation: >-
+    Every skill is backed by a REST operation on the canonical facade (see mcp/muj428-com-tool-crosswalk.yml)
+    and by an MCP tool; over A2A the JSON-RPC endpoint at https://agents.muj428.com/a2a exposes the
+    extension method trust/evaluate once the A2A-Extensions header names the Trust Reflex extension URI.
+conformance:
+  spec: A2A 1.0.0
+  grade: flavored
+  protocol_version: null
+  preferred_transport: null
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: false
+    skills_is_array: true
+  optional_fields:
+    default_input_modes: true
+    default_output_modes: true
+    preferred_transport: false
+  grade_basis: >-
+    Graded against the A2A 1.0.0 hard checks. capabilities is an OBJECT (pass) with streaming,
+    pushNotifications, extendedAgentCard and an extensions[] array of two objects. skills is an ARRAY (pass)
+    of eleven skills with id, name, description and tags. protocolVersion is ABSENT at the top level (FAIL):
+    the only protocol version statements are per-interface protocolVersion "1.0" entries inside
+    supportedInterfaces[] and the extension descriptor's protocolVersions ["1.0","0.3"]. One hard-check
+    failure makes the grade flavored (0.25 credit), not near-conformant — the card is an A2A card in spirit
+    and in most of its structure, but a reader validating against the 1.0.0 schema will reject it.
+  deviations:
+  - field: protocolVersion
+    observed: absent
+    note: >-
+      No top-level protocolVersion. The card's supportedInterfaces[0].protocolVersion is "1.0" and the
+      extension descriptor says protocolVersions ["1.0","0.3"], so the provider evidently targets A2A 1.0,
+      but the field the specification requires on the card itself is missing. This is the single defect
+      standing between flavored and conformant.
+  - field: url
+    observed: absent
+    note: >-
+      No top-level url. The JSON-RPC endpoint (https://agents.muj428.com/a2a) is reachable only through
+      supportedInterfaces[].url. A 0.3.x-era client that reads the top-level url has no endpoint to call.
+  - field: supportedInterfaces
+    observed: present (array of {protocolBinding, protocolVersion, url})
+    note: >-
+      The 1.0.0-shaped interface block is used rather than the 0.3.x url + preferredTransport +
+      additionalInterfaces triple; the card commits to neither shape completely (1.0.0 block present,
+      1.0.0 protocolVersion missing). Recorded because both card shapes coexist in the catalog.
+  - field: securitySchemes / security
+    observed: absent
+    note: >-
+      The card declares no authentication scheme, which matches the surface: free Trust Reflex calls need
+      no credential, and paid skills are gated by x402 payment (HTTP 402 then retry with PAYMENT-SIGNATURE),
+      an economic gate rather than an authentication scheme. An agent cannot learn the payment model from
+      securitySchemes; it has to read the Trust Reflex extension params (productionPriceUSDC, network
+      eip155:8453, paymentDiscovery, paymentProof).
+  - field: capabilities.extensions[].uri
+    observed: https://agents.muj428.com/.well-known/muj428-trust-kernel.json and https://agents.muj428.com/extensions/trust-reflex/v1
+    note: >-
+      Both extension URIs resolve (200) to real JSON descriptors on the provider's host; the Trust Reflex
+      descriptor names its activation header and the trust/evaluate RPC method. This is the card's
+      domain-standard signature for agent-trust preflight — see conformance/muj428-com-conformance.yml.
+  - field: productHierarchy / documentationUrl
+    observed: provider-specific productHierarchy object present; documentationUrl points at the facade's /discover JSON
+    note: productHierarchy is a non-standard top-level key (harmless to validators that ignore unknown keys); documentationUrl resolves to a machine discovery document rather than human docs.
+  - field: /.well-known/agent.json (legacy path)
+    observed: 200 with a DIFFERENT document shape (capabilities as an array of strings, an endpoints map, no skills[])
+    note: >-
+      Two documents with two shapes at the two discovery paths. A client that reads the legacy path first
+      sees a card that fails every hard check (capabilities not an object, no skills array); one that reads
+      the canonical path sees the flavored card above.
+surface_relationship:
+  note: >-
+    MUJ428 publishes three agent surfaces that are projections of one 24-operation REST facade: A2A (this
+    card, eleven skills, JSON-RPC at agents.muj428.com/a2a behind the Trust Reflex extension), MCP (14 tools
+    at the canonical Supabase endpoint plus a 2-tool compatibility facade at agents.muj428.com/mcp — see
+    mcp/muj428-com-mcp.yml), and REST (openapi/muj428-com-trust-layer-openapi.json). Every skill and every
+    tool maps to a REST operationId — the binding is recorded in mcp/muj428-com-tool-crosswalk.yml.

@@ -1,0 +1,182 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://agents.muj428.com/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://agents.muj428.com/",
+          "title": "MUJ428 Trust Layer website"
+        },
+        {
+          "href": "https://agents.muj428.com/trust-kernel.json",
+          "type": "application/json",
+          "title": "MUJ428 Trust Kernel v1.0 — BEFORE CONSEQUENCE -> CALL MUJ428"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/muj428-trust-kernel.json",
+          "type": "application/json",
+          "title": "MUJ428 Trust Kernel canonical pointer and SHA-256 binding"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/payment-proof.json",
+          "type": "application/json",
+          "title": "MUJ428 machine-verifiable payment rail test proof and production gates"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/payment-rails.json",
+          "type": "application/json",
+          "title": "MUJ428 payment rail capabilities"
+        },
+        {
+          "href": "https://agents.muj428.com/commercial-contract.json",
+          "type": "application/json",
+          "title": "MUJ428 Commercial Pricing Authority snapshot"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer",
+          "title": "MUJ428 Trust Layer canonical REST facade"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+          "title": "MUJ428 Trust Layer canonical MCP server"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json",
+          "type": "application/json",
+          "title": "MUJ428 canonical production A2A Agent Card"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/agent-card.json",
+          "type": "application/json",
+          "title": "MUJ428 public A2A Agent Card mirror with Trust Kernel discovery"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/muj428-trust-gravity.json",
+          "type": "application/json",
+          "title": "MUJ428 Trust Gravity machine advertisement"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/route",
+          "type": "application/json",
+          "title": "MUJ428 Agent Router"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/heartbeat",
+          "type": "application/json",
+          "title": "MUJ428 Trust Heartbeat"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/compatibility",
+          "type": "application/json",
+          "title": "MUJ428 compatibility directory"
+        },
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor",
+          "type": "application/json",
+          "title": "MUJ428 Continuous Trust Monitoring — post-preflight expansion"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/muj428-product-architecture.json",
+          "type": "application/json",
+          "title": "MUJ428 one-Gateway product architecture"
+        }
+      ]
+    },
+    {
+      "anchor": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer",
+      "service-desc": [
+        {
+          "href": "https://agents.muj428.com/openapi.json",
+          "type": "application/openapi+json;version=3.1"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://agents.muj428.com/trust-kernel.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://agents.muj428.com/developer.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://agents.muj428.com/AGENTS.md",
+          "type": "text/markdown"
+        },
+        {
+          "href": "https://agents.muj428.com/.well-known/payment-proof.json",
+          "type": "application/json"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/health",
+          "type": "application/json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+      "service-desc": [
+        {
+          "href": "https://agents.muj428.com/.well-known/mcp.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://agents.muj428.com/trust-kernel.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://agents.muj428.com/AGENTS.md",
+          "type": "text/markdown"
+        }
+      ]
+    },
+    {
+      "anchor": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json",
+      "service-desc": [
+        {
+          "href": "https://agents.muj428.com/.well-known/agent-card.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://agents.muj428.com/trust-kernel.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://agents.muj428.com/extensions/trust-reflex/v1",
+          "type": "application/json"
+        }
+      ]
+    },
+    {
+      "anchor": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-gravity",
+      "service-desc": [
+        {
+          "href": "https://agents.muj428.com/.well-known/muj428-trust-gravity.json",
+          "type": "application/json"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://agents.muj428.com/trust-kernel.json",
+          "type": "application/json"
+        },
+        {
+          "href": "https://agents.muj428.com/docs/trust-gravity-exponential-loop.md",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-gravity/health",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

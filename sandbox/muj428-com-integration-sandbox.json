@@ -1,0 +1,40 @@
+{
+  "name": "MUJ428 External Verified Effect Conformance Sandbox",
+  "positioning": "Bind approved intent to verified effect.",
+  "environment": "TESTNET_CONFORMANCE",
+  "purpose": "Let an external agent/runtime prove it can obtain, carry, and consume an authenticated MUJ428 action-bound receipt and receive a Verified Effect without spending money or touching a real-world target.",
+  "authorize": {
+    "method": "POST",
+    "url": "https://agents.muj428.com/v1/integration-sandbox/authorize",
+    "input": {
+      "action_ref": "unique caller action reference",
+      "external_caller_ref": "caller-controlled URL, URI, or stable identifier",
+      "payload": { "any_json_safe_value": true }
+    }
+  },
+  "execute": {
+    "method": "POST",
+    "url": "https://agents.muj428.com/v1/integration-sandbox/execute",
+    "input": {
+      "receipt": "exact receipt returned by authorize",
+      "current": "exact current-premise object returned by authorize",
+      "payload": "exact payload authorized in step 1"
+    }
+  },
+  "scope": {
+    "target": "muj428://integration-sandbox/echo",
+    "executor": "MUJ428 Integration Sandbox Executor",
+    "assurance_level": "SANDBOX_CONFORMANCE",
+    "execution_authority": "SANDBOX_ONLY",
+    "production_authority": false,
+    "forbidden_effects": ["payment", "fund_transfer", "wallet_signing", "external_write"],
+    "moves_money": false
+  },
+  "verified_effect": {
+    "production_effect": false,
+    "production_adoption_countable": false,
+    "testnet_external_countable_only_with_independent_caller_evidence": true
+  },
+  "example": "https://agents.muj428.com/examples/external-verified-effect.mjs",
+  "auto_spend": false
+}

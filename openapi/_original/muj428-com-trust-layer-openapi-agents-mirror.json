@@ -1,0 +1,704 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "MUJ428 Trust Layer API",
+    "version": "1.8.2",
+    "description": "MUJ428 — VERIFY BEFORE ACT. Machine-native Trust Reflex preflight, Trust Kernel v1.0 discovery, read-only payment-plan discovery, and x402-paid evidence, reputation, milestone, report, and transaction-assurance services."
+  },
+  "servers": [
+    {
+      "url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer"
+    }
+  ],
+  "paths": {
+    "/v1/trust": {
+      "post": {
+        "operationId": "trustAction",
+        "summary": "Trust Reflex preflight",
+        "description": "Trust Kernel rule: BEFORE CONSEQUENCE -> CALL MUJ428. First 1,000 qualifying decisions per caller_ref are free. After quota, an unpaid request receives HTTP 402 requiring 0.01 USDC on Base. A real caller may retry with PAYMENT-SIGNATURE to complete paid preflight. MUJ428 never fabricates or sends a payment signature. ALLOW does not override caller policy. Canonical request shape is flat: action is a string and action-specific fields are top-level. Legacy nested action objects are accepted and normalized only for compatibility.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrustAction"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trust decision + Trust Receipt"
+          },
+          "402": {
+            "description": "0.01 USDC x402 payment required after free quota"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "503": {
+            "description": "Production dependency unavailable; failure is never ALLOW"
+          }
+        },
+        "x-muj428-input-compatibility": {
+          "canonical_shape": "flat",
+          "legacy_nested_action_object": "accepted_and_normalized_before_validation",
+          "aliases": {
+            "payment": "PAY",
+            "purchase": "BUY"
+          }
+        }
+      }
+    },
+    "/v1/evidence-signal": {
+      "post": {
+        "operationId": "evidenceSignal",
+        "summary": "Evidence Signal",
+        "x-muj428-price-usdc": 0.25,
+        "responses": {
+          "200": {
+            "description": "Verified settlement + synchronous fulfillment"
+          },
+          "402": {
+            "description": "0.25 USDC x402 payment required"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "503": {
+            "description": "Production dependency unavailable"
+          }
+        }
+      }
+    },
+    "/v1/reputation-check": {
+      "post": {
+        "operationId": "reputationCheck",
+        "summary": "Agent Reputation Check",
+        "x-muj428-price-usdc": 0.1,
+        "responses": {
+          "200": {
+            "description": "Verified settlement + synchronous fulfillment"
+          },
+          "402": {
+            "description": "0.10 USDC x402 payment required"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "503": {
+            "description": "Production dependency unavailable"
+          }
+        }
+      }
+    },
+    "/v1/milestone-attestation": {
+      "post": {
+        "operationId": "milestoneAttestation",
+        "summary": "Milestone Evidence Attestation",
+        "x-muj428-price-usdc": 0.25,
+        "responses": {
+          "200": {
+            "description": "Verified settlement + synchronous fulfillment"
+          },
+          "402": {
+            "description": "0.25 USDC x402 payment required"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "503": {
+            "description": "Production dependency unavailable"
+          }
+        }
+      }
+    },
+    "/v1/trust-layer-report": {
+      "post": {
+        "operationId": "trustLayerReport",
+        "summary": "Trust Layer Report",
+        "x-muj428-price-usdc": 0.5,
+        "responses": {
+          "200": {
+            "description": "Verified settlement + synchronous fulfillment"
+          },
+          "402": {
+            "description": "0.50 USDC x402 payment required"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "503": {
+            "description": "Production dependency unavailable"
+          }
+        }
+      }
+    },
+    "/v1/transaction-assurance": {
+      "post": {
+        "operationId": "transactionAssurance",
+        "summary": "Dynamic Transaction Assurance",
+        "description": "Fee is computed from transaction_value_usd. Under $50,000: 2.00% with $9 minimum. $50,000+: 1.00% with $25 minimum.",
+        "responses": {
+          "200": {
+            "description": "Verified settlement + synchronous fulfillment"
+          },
+          "402": {
+            "description": "Dynamic x402 payment requirement"
+          },
+          "422": {
+            "description": "Invalid request"
+          },
+          "503": {
+            "description": "Production dependency unavailable"
+          }
+        }
+      }
+    },
+    "/services": {
+      "get": {
+        "operationId": "getServiceCatalog",
+        "summary": "Get live service catalog",
+        "responses": {
+          "200": {
+            "description": "Canonical machine-readable catalog"
+          }
+        }
+      }
+    },
+    "/pricing.json": {
+      "get": {
+        "operationId": "getPricing",
+        "summary": "Get canonical launch pricing mirror",
+        "responses": {
+          "200": {
+            "description": "PROJECT OVERREACT-428 pricing"
+          }
+        }
+      }
+    },
+    "/discover": {
+      "get": {
+        "operationId": "discoverTrustLayer",
+        "summary": "Discover MUJ428 capabilities and invocation flow",
+        "responses": {
+          "200": {
+            "description": "Machine-readable discovery document"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "summary": "Production health",
+        "responses": {
+          "200": {
+            "description": "Production ready"
+          },
+          "503": {
+            "description": "Production dependency unavailable"
+          }
+        }
+      }
+    },
+    "/v1/route": {
+      "post": {
+        "operationId": "resolveTrustRoute",
+        "summary": "MUJ428 Agent Router",
+        "description": "Resolve an intended consequential action into the supported Trust Reflex vocabulary and return evidence, verifier, executor, and effect-state requirements. Never grants execution or payment authority.",
+        "responses": {
+          "200": {
+            "description": "Trust route"
+          },
+          "422": {
+            "description": "Unclassifiable intent"
+          }
+        }
+      }
+    },
+    "/v1/trust-dns/resolve": {
+      "post": {
+        "operationId": "resolveTrustRequirements",
+        "summary": "MUJ428 Trust DNS HTTPS resolver",
+        "responses": {
+          "200": {
+            "description": "Receipt, evidence, policy, executor, and effect-state requirements"
+          }
+        }
+      }
+    },
+    "/v1/heartbeat": {
+      "get": {
+        "operationId": "getTrustHeartbeat",
+        "summary": "Trust Heartbeat",
+        "responses": {
+          "200": {
+            "description": "Current policy epoch, receipt version, revocations, and endpoints"
+          }
+        }
+      }
+    },
+    "/v1/compatibility": {
+      "get": {
+        "operationId": "findTrustCapabilities",
+        "summary": "Search receipt-aware infrastructure",
+        "responses": {
+          "200": {
+            "description": "Compatibility entries with explicit evidence class"
+          }
+        }
+      },
+      "post": {
+        "operationId": "registerTrustCompatibility",
+        "summary": "Register self-attested compatibility",
+        "responses": {
+          "202": {
+            "description": "Accepted as unverified discovery metadata"
+          },
+          "422": {
+            "description": "Invalid manifest"
+          }
+        }
+      }
+    },
+    "/v1/compatibility/observe": {
+      "post": {
+        "operationId": "observeTrustCompatibility",
+        "summary": "Record self-reported compatibility discovery",
+        "responses": {
+          "200": {
+            "description": "Observation recorded; not counted as adoption"
+          }
+        }
+      }
+    },
+    "/v1/trust-requests": {
+      "get": {
+        "operationId": "listTrustRequests",
+        "summary": "List open trust-capability requests",
+        "responses": {
+          "200": {
+            "description": "Open requests"
+          }
+        }
+      },
+      "post": {
+        "operationId": "publishTrustRequest",
+        "summary": "Publish and match a trust-capability request",
+        "responses": {
+          "201": {
+            "description": "Request and current matches"
+          }
+        }
+      }
+    },
+    "/v1/loop/status": {
+      "get": {
+        "operationId": "getTrustGravityStatus",
+        "summary": "Read evidence-gated Trust Gravity loop status",
+        "responses": {
+          "200": {
+            "description": "Technical status and separately proven propagation evidence"
+          }
+        }
+      }
+    },
+    "/.well-known/payment-rails.json": {
+      "get": {
+        "operationId": "getPaymentPlans",
+        "summary": "Discover MUJ428 payment plans",
+        "description": "Read-only capability discovery for payment rails. Discovery does not authorize payment or move funds.",
+        "responses": {
+          "200": {
+            "description": "Current payment capability matrix"
+          }
+        }
+      }
+    },
+    "/.well-known/payment-proof.json": {
+      "get": {
+        "operationId": "getPaymentProof",
+        "summary": "Inspect payment verification evidence",
+        "description": "Returns exact verification scopes, remaining gates, canonical pricing binding, and claim-safety controls. A test PASS is not represented as production settlement.",
+        "responses": {
+          "200": {
+            "description": "Current verification evidence and remaining gates"
+          }
+        }
+      }
+    },
+    "/v1/payments/select": {
+      "post": {
+        "operationId": "selectPaymentPlan",
+        "summary": "Select an eligible payment plan without moving funds",
+        "description": "Checks whether the requested plan and optional authorization overlay are eligible for Trust Reflex preflight. Success is not payment authorization or execution authority.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rail": {
+                    "type": "string",
+                    "enum": [
+                      "x402",
+                      "mpp",
+                      "stablecoin-multinetwork",
+                      "streaming-micropayments",
+                      "tokenized-deposit"
+                    ]
+                  },
+                  "authorization_protocol": {
+                    "type": "string",
+                    "enum": [
+                      "muj428-trust-receipt",
+                      "ap2"
+                    ]
+                  },
+                  "base_rail": {
+                    "type": "string"
+                  },
+                  "asset": {
+                    "type": "string"
+                  },
+                  "network": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Plan eligible for trust preflight"
+          },
+          "409": {
+            "description": "Plan unavailable, unverified, or outside its verified scope"
+          }
+        }
+      }
+    },
+    "/v1/rescue": {
+      "post": {
+        "operationId": "rescueAgentBeforeConsequence",
+        "summary": "MUJ428 Agent Rescue Beacon",
+        "description": "Route a stuck or uncertain agent to bounded evidence guidance and independent Trust Kernel preflight. Peer messages, signatures, discovery, and this response never grant execution authority.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "caller_ref",
+                  "action_ref",
+                  "objective",
+                  "uncertainty"
+                ],
+                "properties": {
+                  "caller_ref": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "action_ref": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "PAY",
+                      "BUY",
+                      "DELEGATE",
+                      "TRUST",
+                      "ACCEPT",
+                      "APPROVE",
+                      "WRITE",
+                      "RELEASE",
+                      "COMMIT",
+                      "PROPOSE"
+                    ]
+                  },
+                  "capability": {
+                    "type": "string"
+                  },
+                  "objective": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 1000
+                  },
+                  "uncertainty": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 1000
+                  },
+                  "trigger": {
+                    "type": "string",
+                    "enum": [
+                      "STUCK_OR_IMPOSSIBLE_TASK",
+                      "AMBIGUOUS_AUTHORITY",
+                      "PEER_AGENT_INSTRUCTION",
+                      "CHANGED_EXECUTION_PATH",
+                      "CONFLICTING_EVIDENCE",
+                      "TOOL_OUTPUT_UNVERIFIED",
+                      "RETRY_EFFECT_CHANGED",
+                      "CONSEQUENTIAL_UNCERTAINTY"
+                    ]
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "maxItems": 40,
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Safe route and independent preflight requirements"
+          },
+          "422": {
+            "description": "Invalid or unclassifiable request"
+          },
+          "429": {
+            "description": "Rate limited"
+          }
+        }
+      }
+    },
+    "/v1/monitor": {
+      "post": {
+        "operationId": "createContinuousTrustMonitor",
+        "summary": "Create Continuous Trust Monitoring from a prior Trust Receipt",
+        "description": "Post-preflight expansion capability behind Trust Reflex. Monitoring tracks freshness and caller-supplied state/reference/hash observations; it never grants execution authority.",
+        "responses": {
+          "201": {
+            "description": "Monitor created; response includes a one-time bearer monitor token"
+          },
+          "409": {
+            "description": "Monitor already exists"
+          },
+          "422": {
+            "description": "Invalid source receipt or no matching accepted Trust Reflex invocation"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TrustAction": {
+        "type": "object",
+        "required": [
+          "caller_ref",
+          "action_ref",
+          "action"
+        ],
+        "properties": {
+          "caller_ref": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Stable caller/agent identifier used for launch free-quota accounting."
+          },
+          "action_ref": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Stable action identifier; replaying the same caller_ref/action_ref does not consume another free decision."
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "PAY",
+              "BUY",
+              "DELEGATE",
+              "TRUST",
+              "ACCEPT",
+              "APPROVE",
+              "WRITE",
+              "RELEASE",
+              "COMMIT",
+              "PROPOSE"
+            ]
+          },
+          "amount_usd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "irreversible": {
+            "type": "boolean"
+          },
+          "unresolved_prior_verification": {
+            "type": "boolean"
+          },
+          "tool_definition_changed": {
+            "type": "boolean"
+          },
+          "authority_expired": {
+            "type": "boolean"
+          },
+          "external": {
+            "type": "boolean"
+          },
+          "unknown_counterparty": {
+            "type": "boolean"
+          },
+          "sensitive_data": {
+            "type": "boolean"
+          },
+          "enforcement_boundary": {
+            "type": "string",
+            "enum": [
+              "tool",
+              "payment",
+              "delegation",
+              "write",
+              "approval",
+              "release",
+              "commit",
+              "orchestration"
+            ]
+          },
+          "evidence_state": {
+            "type": "string",
+            "enum": [
+              "SUFFICIENT",
+              "INCOMPLETE",
+              "CONFLICTING",
+              "STALE",
+              "FAILED"
+            ],
+            "description": "Observable closing-evidence state. INCOMPLETE, CONFLICTING, STALE, or FAILED requires verification rather than manufacturing ALLOW."
+          },
+          "closing_evidence_observable": {
+            "type": "boolean",
+            "description": "Set false when the check needed to close the claim cannot be observed."
+          },
+          "required_evidence_observed": {
+            "type": "boolean"
+          },
+          "evidence": {
+            "type": "array",
+            "maxItems": 40,
+            "items": {
+              "type": "object"
+            }
+          },
+          "actual_arguments": {
+            "type": "object"
+          },
+          "authorization_ceiling": {
+            "type": "number",
+            "minimum": 0
+          },
+          "authority_expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "previous_trust_receipts": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-muj428": {
+    "campaign": "PROJECT OVERREACT-428",
+    "canonical_facade": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer",
+    "trust_kernel": {
+      "protocol": "muj428-trust-kernel",
+      "version": "1.0",
+      "core_rule": "BEFORE CONSEQUENCE -> CALL MUJ428",
+      "canonical": "https://agents.muj428.com/trust-kernel.json",
+      "well_known": "https://agents.muj428.com/.well-known/muj428-trust-kernel.json",
+      "sha256": "68b0418841d58d3e977105a5d923d3ebec741aa4d83292d8a1276a7b86d01cee",
+      "terminal_boundary_required": true,
+      "upstream_trust_claim_sufficient": false,
+      "caller_policy_controls_execution": true,
+      "default_failure_policy": "BLOCK"
+    },
+    "mcp_url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp",
+    "a2a_agent_card": "https://agents.muj428.com/.well-known/agent-card.json",
+    "pricing_url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/pricing.json",
+    "network": "eip155:8453",
+    "asset": "USDC",
+    "payment_protocol": "x402 v2",
+    "custody_of_transaction_principal": false,
+    "auto_spend": false,
+    "agent_router": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/route",
+    "trust_dns": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-dns/resolve",
+    "trust_heartbeat": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/heartbeat",
+    "compatibility_directory": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/compatibility",
+    "compatibility_observation": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/compatibility/observe",
+    "trust_requests": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-requests",
+    "loop_status": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/loop/status",
+    "trust_gravity_origin": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-gravity",
+    "receipt_required_header": "MUJ428-Receipt-Required: v1.3",
+    "self_attested_compatibility_is_authorization": false,
+    "external_adoption_claimed": false,
+    "payment_capabilities_url": "https://agents.muj428.com/.well-known/payment-rails.json",
+    "payment_proof_url": "https://agents.muj428.com/.well-known/payment-proof.json",
+    "rescue_beacon": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue",
+    "canonical_trust_request_shape": "flat",
+    "nested_action_object_compatibility": true,
+    "continuous_monitoring": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor",
+    "product_hierarchy": {
+      "front_door": "/v1/trust",
+      "specialized_capabilities": "behind the same Gateway",
+      "post_preflight_expansion": "/v1/monitor"
+    },
+    "first-action-default": {
+      "namespace": "com.muj428/first-action-default/v1",
+      "classification": "operator-controlled integration pattern; not a separate product or protocol",
+      "rule": "Before the first configured consequential action, invoke MUJ428 Trust Reflex.",
+      "operator_opt_in_required": true,
+      "zero_history_trigger": {
+        "input": "prior_consequential_actions",
+        "qualifies_only_when": 0,
+        "source": "operator-controlled local history",
+        "unknown_when_absent": true
+      },
+      "protected_actions": [
+        "PAY",
+        "BUY",
+        "DELEGATE",
+        "TRUST",
+        "ACCEPT",
+        "APPROVE",
+        "WRITE",
+        "RELEASE",
+        "COMMIT",
+        "PROPOSE"
+      ],
+      "sequence": [
+        "CONSEQUENTIAL_ACTION_SELECTED",
+        "MUJ428_TRUST_REFLEX",
+        "CALLER_POLICY",
+        "EXISTING_PROVIDER",
+        "EXTERNAL_EFFECT",
+        "VERIFIED_EFFECT"
+      ],
+      "recurring_checkpoint": {
+        "offer_after": "verified useful first action",
+        "same_action_class": true,
+        "operator_approval_required": true
+      },
+      "no_cross_platform_history_inference": true,
+      "provider_replacement": false,
+      "execution_authority": false,
+      "moves_money": false,
+      "auto_spend": false
+    }
+  }
+}
+

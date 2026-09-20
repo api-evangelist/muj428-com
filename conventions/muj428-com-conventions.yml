@@ -1,0 +1,155 @@
+generated: '2026-09-19'
+method: searched
+source: >-
+  https://agents.muj428.com/AGENTS.md, developer.json, index.md and glossary.md; openapi/muj428-com-trust-layer-openapi.json
+  (schema descriptions); response headers observed live on 2026-09-19 (CORS allow/expose lists, sb-request-id,
+  strict-transport-security); the Trust Gravity advertisement and the integration-sandbox contract.
+description: >-
+  How the MUJ428 Trust Layer behaves across every operation: no-credential access with an economic gate, a flat
+  request shape, per-action replay keys, x402 payment signalling, request-id tracing, manifest + policy-epoch
+  versioning, a flat error envelope, and — because the product IS a reversibility check for other systems' actions —
+  an honest account of how little of its own write surface can be undone.
+
+base_url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+api_style: REST over HTTPS, JSON requests, JSON responses; the same operations exposed as 14 MCP tools and 11 A2A skills
+
+authentication:
+  scheme: none for free calls; x402 PAYMENT-SIGNATURE for paid services; one-time bearer token minted by POST /v1/monitor
+  docs: https://agents.muj428.com/AGENTS.md
+  detail: authentication/muj428-com-authentication.yml
+
+request_shape:
+  canonical: flat — caller_ref, action_ref, action (string enum) at the top level with action-specific fields beside them
+  legacy: nested action objects are accepted and normalized before validation
+  action_aliases: {payment: PAY, purchase: BUY}
+  action_vocabulary: [PAY, BUY, DELEGATE, TRUST, ACCEPT, APPROVE, WRITE, RELEASE, COMMIT, PROPOSE]
+  unsupported_intent_rule: Do not invent an action enum value; resolve the intent through POST /v1/route and preflight with the returned supported action.
+  source: OpenAPI /v1/trust description; trust-kernel.json unsupported_intent_rule
+
+idempotency:
+  supported: true
+  coverage: partial
+  mechanism: caller-supplied replay key in the body (caller_ref + action_ref), not a header
+  header: null
+  scope: [trustAction]
+  retention: undocumented
+  conflict_behavior: undocumented
+  description: >-
+    The TrustAction schema states "replaying the same caller_ref/action_ref does not consume another free decision" and
+    developer.json sets replay_same_caller_action_consumes_quota=false — so a retried preflight for the same action is
+    quota-neutral, and agents.json says "Replays do not double-count". Whether the replay returns the SAME decision and
+    receipt, or re-evaluates, is not stated. Nothing equivalent is documented for the other writes: the five x402-paid
+    POSTs, POST /v1/monitor (409 "Monitor already exists" is a uniqueness guard on the source receipt, which is
+    replay-safe by construction but not described as idempotency), POST /v1/compatibility (202), POST /v1/trust-requests
+    (201) and POST /v1/compatibility/observe. The facade's CORS allow-list names an `idempotency-key` request header that
+    no document describes; it is recorded as unverified rather than as support. Coverage is therefore partial — one
+    operation out of eleven writes — and the band gate should read it that way.
+  docs: https://agents.muj428.com/developer.json
+  replay_protection_elsewhere: >-
+    The Verified Effect sandbox (integration-sandbox.json) demonstrates replay DENIAL on receipt consumption — a second
+    execute with the same receipt must return replay_denied true with NONCE_ALREADY_CONSUMED or EFFECT_ALREADY_COMMITTED.
+    That protects the executor's mutation, not the caller's retry, and is the product's feature rather than the API's
+    idempotency contract.
+
+dry_run:
+  supported: partial
+  description: >-
+    Trust Reflex itself is a non-mutating rehearsal of SOMEONE ELSE's action (execution_authority=false; nothing moves),
+    and the sandbox contract gives an executor a zero-money conformance path (TESTNET_CONFORMANCE). No dry_run / simulate /
+    validate_only parameter exists on MUJ428's own write operations; select_assurance_tier (MCP) and POST /v1/payments/select
+    are planning-only calls that quote a fee or check a rail without charging.
+  detail: sandbox/muj428-com-sandbox.yml
+
+reversibility:
+  grade: none
+  docs: null
+  note: >-
+    No reversal operation exists on the surface: nothing cancels a monitor, withdraws a trust request or compatibility
+    registration, or refunds a paid x402 service, and no document mentions refund, cancel, void or chargeback (grepped
+    commercial-contract.json, developer.json, integrate.json, agent-catalog.json, AGENTS.md, glossary.md). Because the API
+    is not read-only — it has eleven POSTs, five of which settle USDC on Base — `na` would be wrong; the honest grade is
+    `none`. Two facts soften it for a buyer without changing the grade: MUJ428 never takes custody of the caller's
+    transaction principal (funds it settles are its own fees), and a free-quota preflight has no side effect a caller
+    would need to undo. The paid services are on-chain settlements and, absent a stated policy, should be treated as final.
+  write_surfaces:
+  - operation: trustAction (POST /v1/trust)
+    action: Record a preflight decision; consumes one free qualifying decision per unique action_ref, or 0.01 USDC after the quota
+    reversal: none documented (replay of the same action_ref is quota-neutral, which is idempotency, not reversal)
+    reversal_operation: null
+    window: null
+  - operation: 'evidenceSignal, reputationCheck, milestoneAttestation, trustLayerReport, transactionAssurance'
+    action: x402-settled paid service (0.10–0.50 USDC, or 1–2% for assurance)
+    reversal: none documented; no refund policy published
+    reversal_operation: null
+    window: null
+  - operation: createContinuousTrustMonitor (POST /v1/monitor)
+    action: Create a monitor from a prior receipt (201; 409 if it exists)
+    reversal: none documented — states ACTIVE / REQUIRE_VERIFICATION / BLOCKED / CLOSED are described, but no close/cancel operation is public
+    reversal_operation: null
+    window: null
+  - operation: registerTrustCompatibility, publishTrustRequest, observeTrustCompatibility
+    action: Directory writes (202 / 201 / 200)
+    reversal: none documented
+    reversal_operation: null
+    window: null
+
+pagination:
+  style: none
+  description: The two collection reads (GET /v1/compatibility, GET /v1/trust-requests) return unpaged arrays; no limit/cursor parameters exist in the spec.
+
+field_expansion:
+  supported: false
+
+metadata:
+  supported: false
+  note: No free-form metadata field; the closest is the evidence[] array (max 40 objects) and actual_arguments object on TrustAction.
+
+request_tracing:
+  request_id_header: X-Request-Id
+  description: >-
+    X-Request-Id is in the facade's access-control-expose-headers and x-request-id in its allow-headers, so the caller may
+    supply one and read one back; every response additionally carries Supabase's sb-request-id (observed). Not documented
+    in prose by the provider.
+  other_exposed_headers: [PAYMENT-REQUIRED, PAYMENT-RESPONSE, EXTENSION-RESPONSES, MUJ428-Receipt-Required, Link, X-MUJ428-Policy-Epoch]
+
+versioning:
+  scheme: manifest semver (1.8.3) + /v1 path prefix + policy epoch + receipt version
+  mechanism: none per request — no version header; the policy epoch travels back in X-MUJ428-Policy-Epoch
+  current: 1.8.3
+  policy_epoch: 2026-08-30.1
+  receipt_version: '1.3'
+  detail: lifecycle/muj428-com-lifecycle.yml
+  changelog: changelog/muj428-com-changelog.yml
+
+error_envelope:
+  media_type: application/json
+  shape: '{ "error": string, "service"?: string }  (Trust Gravity endpoints: { "ok": false, "error": string, ...context })'
+  rfc9457: false
+  detail: errors/muj428-com-problem-types.yml
+
+payment_signaling:
+  protocol: x402 v2
+  challenge: HTTP 402 + PAYMENT-REQUIRED header (exact amount, network eip155:8453, asset USDC, seller)
+  retry: same request + PAYMENT-SIGNATURE header
+  success: HTTP 200 + PAYMENT-RESPONSE header
+  auto_spend: false
+  note: MUJ428 never sends or fabricates a signature; paid continuation of Trust Reflex needs explicit caller authorization.
+  docs: https://agents.muj428.com/developer.json
+
+rate_limit_signaling:
+  status_on_exhaustion: 429 (declared on POST /v1/rescue only)
+  headers: none documented (no X-RateLimit-*, RateLimit-* or Retry-After in the spec or observed)
+  quota_signal: payment_required=false in the Trust Reflex 200 body while free quota remains; 402 once exhausted
+  detail: rate-limits/muj428-com-rate-limits.yml
+
+decision_contract:
+  wire_decisions: [ALLOW, VERIFY, REQUIRE_VERIFICATION, DENY]
+  public_envelope: {PROCEED: [EXECUTE], PAUSE: [REQUIRE_MORE_EVIDENCE, ESCALATE_TO_HUMAN, ROUTE_TO_INDEPENDENT_PREFLIGHT], STOP: [BLOCK]}
+  wire_compatibility: {ALLOW: EXECUTE, VERIFY: REQUIRE_MORE_EVIDENCE, REQUIRE_VERIFICATION: REQUIRE_MORE_EVIDENCE, DENY: BLOCK}
+  fail_closed: 'default failure policy BLOCK; "failure is never ALLOW" (503 description)'
+  execution_authority: caller — a free-preflight receipt carries execution_authority=false
+  source: well-known/muj428-com-muj428-trust-boundary.json; trust-kernel.json
+
+transport_security:
+  hsts: 'max-age=31536000; includeSubDomains; preload (observed on the facade)'
+  detail: security/muj428-com-domain-security.yml

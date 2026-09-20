@@ -1,0 +1,112 @@
+generated: '2026-09-19'
+method: derived
+format: provider-json
+source: >-
+  Derived from the 4xx/5xx responses declared in openapi/muj428-com-trust-layer-openapi.json (OpenAPI 3.1.0,
+  24 operations, v1.8.2) and enriched with envelopes OBSERVED on 2026-09-19 from live unauthenticated
+  requests: an empty-body POST to /v1/trust (422), to /v1/route (422), to the x402 evidence-signal endpoint
+  (422), a GET on the MCP endpoints (405 / 406), a JSON-RPC probe of the A2A endpoint (400 / -32600) and an
+  unknown facade path (404). No response is application/problem+json; the API is NOT RFC 9457.
+rfc9457: false
+envelope:
+  media_type: application/json
+  default_shape: '{ "error": string, "service"?: string }'
+  variants:
+  - shape: '{ "error": "invalid_request", "service": "trust-reflex" }'
+    observed_on: POST /v1/trust with body {}
+    status: 422
+  - shape: '{ "error": "invalid_request", "service": "evidence-signal" }'
+    observed_on: POST /functions/v1/trust-layer-x402/v1/evidence-signal with body {}
+    status: 422
+    note: Validation runs BEFORE the x402 payment challenge — an unpaid, invalid request never sees the 402.
+  - shape: '{ "ok": false, "error": "action_or_capability_required", "allowed_actions": ["PAY","BUY","DELEGATE","TRUST","ACCEPT","APPROVE","WRITE","RELEASE","COMMIT","PROPOSE"] }'
+    observed_on: POST /v1/route with body {}
+    status: 422
+    note: The Trust Gravity endpoints use an ok/error envelope and echo the allowed enum — the most helpful error shape on the surface.
+  - shape: '{ "error": "not_found", "discover": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/discover" }'
+    observed_on: POST /functions/v1/trust-layer/a2a (an unrouted facade path)
+    status: 404
+    note: Every facade 404 points the caller at the discovery document.
+  - shape: '{ "jsonrpc": "2.0", "id": 1, "error": { "code": -32600, "message": "Activate https://agents.muj428.com/extensions/trust-reflex/v1 using the A2A-Extensions header." } }'
+    observed_on: POST https://agents.muj428.com/a2a (JSON-RPC without the extension header)
+    status: 400
+  - shape: '{ "jsonrpc": "2.0", "id": 2, "error": { "code": -32601, "message": "Method not found" } }'
+    observed_on: MCP resources/list and prompts/list on the canonical server
+    status: 200
+request_id: >-
+  The facade exposes X-Request-Id (access-control-expose-headers) and accepts x-request-id from the caller;
+  every response also carries a Supabase sb-request-id (observed, e.g. 01a0bc8f-68f1-7194-9be7-59632f480fc3).
+  Quote either when reporting a problem to sales@muj428.com.
+problems:
+  - status: 402
+    title: Payment Required (x402)
+    media_type: application/json
+    operations: [trustAction, evidenceSignal, reputationCheck, milestoneAttestation, trustLayerReport, transactionAssurance]
+    meaning: >-
+      The request is valid but unpaid: on /v1/trust the caller_ref has exhausted its 1,000 free qualifying decisions;
+      on the five paid services every call is priced. Per the provider's x402_flow the response carries a
+      PAYMENT-REQUIRED header with the exact amount, network (eip155:8453), asset (USDC) and seller.
+    remediation: >-
+      Have the caller — never MUJ428 — authorize the payment under its own wallet policy, then retry the SAME request
+      with a valid PAYMENT-SIGNATURE header. The success response carries PAYMENT-RESPONSE. Paid continuation of Trust
+      Reflex requires explicit caller authorization; there is no automatic charge.
+    source: OpenAPI 402 descriptions; https://agents.muj428.com/developer.json x402_flow
+  - status: 409
+    title: Conflict
+    media_type: application/json
+    operations: [createContinuousTrustMonitor, selectPaymentPlan]
+    meaning: 'POST /v1/monitor: "Monitor already exists" for the source receipt. POST /v1/payments/select: "Plan unavailable, unverified, or outside its verified scope".'
+    remediation: For a monitor, reuse the existing one; for a plan, read /.well-known/payment-rails.json and /.well-known/payment-proof.json to pick a rail whose production_verified scope covers the requested mode.
+  - status: 422
+    title: Invalid request
+    media_type: application/json
+    operations: [trustAction, evidenceSignal, reputationCheck, milestoneAttestation, trustLayerReport, transactionAssurance, resolveTrustRoute, registerTrustCompatibility, rescueAgentBeforeConsequence, createContinuousTrustMonitor]
+    meaning: >-
+      Missing or malformed required fields — on /v1/trust the minimum is caller_ref (>=3 chars), action_ref (>=3 chars) and
+      action (one of the ten-value enum); on /v1/monitor also "invalid source receipt or no matching accepted Trust Reflex
+      invocation"; on /v1/rescue "invalid or unclassifiable request". The canonical request shape is FLAT (action is a string
+      and action-specific fields are top-level); legacy nested action objects are accepted and normalized.
+    remediation: Send the flat shape from AGENTS.md; if the intent does not fit the enum, resolve it through POST /v1/route first (the 422 from that endpoint echoes allowed_actions) rather than inventing an action value.
+  - status: 429
+    title: Rate limited
+    media_type: application/json
+    operations: [rescueAgentBeforeConsequence]
+    meaning: Declared only on POST /v1/rescue ("Rate limited"); no limit number and no Retry-After header is documented.
+    remediation: Back off and retry; see rate-limits/muj428-com-rate-limits.yml.
+  - status: 503
+    title: Production dependency unavailable
+    media_type: application/json
+    operations: [trustAction, evidenceSignal, reputationCheck, milestoneAttestation, trustLayerReport, transactionAssurance, getHealth]
+    meaning: 'A production dependency is down. The spec is explicit about the fail-closed semantics: "failure is never ALLOW".'
+    remediation: Treat as a BLOCK for the pending consequential action; poll GET /health (facilitator_ready, ledger_ready, production_ready flags) before retrying.
+  - status: 428
+    title: Precondition Required (MUJ428-Receipt-Required)
+    media_type: application/json
+    operations: []
+    meaning: >-
+      Not a facade response — the Trust Gravity advertisement documents 428 as the http_status_signal a receipt-aware
+      EXECUTOR returns (header MUJ428-Receipt-Required: v1.3, body {"trust_protocol":"muj428","receipt_required":true,
+      "receipt_version":"1.3"}) when an agent attempts a consequential action without a Trust Receipt. Recorded so an
+      agent recognises the signal when a third-party executor emits it.
+    remediation: Obtain a Trust Receipt via POST /v1/trust and present it at the executor's mutation boundary.
+    source: well-known/muj428-com-muj428-trust-gravity.json receipt_required_advertisement
+  - status: 404
+    title: Not found
+    media_type: application/json
+    meaning: Unknown facade path; body carries a discover link.
+    remediation: Follow the discover URL or the api-catalog.
+  - status: 405
+    title: Method not allowed
+    operations: []
+    meaning: GET on https://agents.muj428.com/mcp — the MCP facade is POST-only.
+    remediation: POST JSON-RPC 2.0 with Accept application/json, text/event-stream.
+  - status: 406
+    title: Not acceptable
+    operations: []
+    meaning: GET on the canonical MCP endpoint without an MCP request.
+    remediation: Same as 405.
+decision_semantics:
+  note: >-
+    Not errors, but easy to misread as them: the Trust Reflex 200 body carries a DECISION (ALLOW, VERIFY, REQUIRE_VERIFICATION,
+    DENY; wire-compatible with the public EXECUTE / REQUIRE_MORE_EVIDENCE / BLOCK envelope) and payment_required=false while
+    free quota remains. A DENY is a successful 200. Free-preflight receipts carry execution_authority=false by design.

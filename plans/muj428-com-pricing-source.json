@@ -1,0 +1,92 @@
+{
+  "schema_version": "2.3.1",
+  "canonical_source": "Airtable Commercial Pricing Authority",
+  "campaign": "PROJECT OVERREACT-428",
+  "effective_date": "2026-08-29",
+  "review_date": "2026-10-20",
+  "currency": "USD/USDC",
+  "network": "eip155:8453",
+  "threshold_usd": 50000,
+  "trust_reflex": {
+    "evaluation_decisions_free": 1000,
+    "production_price_usd": 0.01,
+    "production_atomic_usdc": 10000,
+    "network": "eip155:8453",
+    "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust",
+    "status": "LIVE: free quota then x402",
+    "price_review": "approximately every 60 days; never automatic",
+    "activation_price_usd": 0,
+    "automatic_paid_continuation": false,
+    "paid_continuation_requires_explicit_authorization": true,
+    "no_card_required": true,
+    "no_wallet_required": true,
+    "no_contract_required": true
+  },
+  "assurance": [
+    {
+      "id": "core-assurance",
+      "name": "Transaction Assurance",
+      "fee_percent": 2,
+      "minimum_fee_usd": 9,
+      "transaction_range": {
+        "min_usd_exclusive": 0,
+        "max_usd_exclusive": 50000
+      },
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/transaction-assurance",
+      "payment_protocol": "dynamic x402",
+      "status": "LIVE"
+    },
+    {
+      "id": "enhanced-assurance",
+      "name": "Enhanced Trust Layer",
+      "fee_percent": 1,
+      "minimum_fee_usd": 25,
+      "transaction_range": {
+        "min_usd_inclusive": 50000,
+        "max_usd": null
+      },
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/transaction-assurance",
+      "payment_protocol": "dynamic x402",
+      "status": "LIVE"
+    }
+  ],
+  "flat_services": [
+    {
+      "id": "reputation-check",
+      "price_usdc": 0.1,
+      "atomic_usdc": 100000,
+      "protocol": "x402",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/reputation-check",
+      "status": "LIVE"
+    },
+    {
+      "id": "milestone-attestation",
+      "price_usdc": 0.25,
+      "atomic_usdc": 250000,
+      "protocol": "x402",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/milestone-attestation",
+      "status": "LIVE"
+    },
+    {
+      "id": "evidence-signal",
+      "price_usdc": 0.25,
+      "atomic_usdc": 250000,
+      "protocol": "x402",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/evidence-signal",
+      "status": "LIVE"
+    },
+    {
+      "id": "trust-report",
+      "price_usdc": 0.5,
+      "atomic_usdc": 500000,
+      "protocol": "x402",
+      "endpoint": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-layer-report",
+      "status": "LIVE"
+    }
+  ],
+  "pricing_rule": "launch: Trust Reflex first 1,000 qualifying evaluation decisions free then $0.01/production preflight; Evidence Signal $0.25; Reputation $0.10; Milestone $0.25; Trust Report $0.50; under $50,000 assurance = 2.00%/$9 minimum; $50,000+ assurance = 1.00%/$25 minimum",
+  "automatic_price_increases": false,
+  "custody_notice": "Percentage pricing is the MUJ428 assurance-service fee. MUJ428 does not custody buyer/seller transaction principal.",
+  "change_note": "2026-08-29 founder-approved restoration of Transaction Assurance rates to 2% under $50,000 and 1% at or above $50,000.",
+  "authority_sync_note": "2026-09-19: removed retired/unapproved autonomous-proposal pricing to match Airtable Commercial Pricing Authority."
+}

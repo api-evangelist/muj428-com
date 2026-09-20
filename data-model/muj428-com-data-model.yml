@@ -1,0 +1,84 @@
+generated: '2026-09-19'
+method: derived
+source: >-
+  Derived from openapi/muj428-com-trust-layer-openapi.json (OpenAPI 3.1.0; one named schema, TrustAction, plus inline
+  request schemas on /v1/rescue, /v1/payments/select and the response descriptions), the MCP tool inputSchemas
+  (mcp/muj428-com-mcp-tools.json), and the provider's own vocabulary documents — glossary.md, trust-boundary.json
+  (trust_receipt.covers_when_available), developer.json (continuous_trust_monitoring states) and payment-rails.json.
+  The spec declares NO response schemas, so response-side entities (TrustDecision, TrustReceipt, VerifiedEffect,
+  Monitor) are described from the prose contracts and marked as such; nothing below is invented beyond those sources.
+docs: https://agents.muj428.com/glossary.md
+notation: >-
+  Entities are addressed by caller-chosen stable strings rather than server-issued ids: caller_ref identifies the
+  agent, action_ref the intended action, requester_ref / observer_ref the directory actors. Relationships use
+  has_one / has_many / belongs_to with the reference field in `via`.
+
+entities:
+  - name: TrustAction
+    schema: '#/components/schemas/TrustAction'
+    domain: preflight
+    description: The request to preflight one consequential action. Required caller_ref, action_ref, action (enum of ten); optional risk context (amount_usd, irreversible, external, unknown_counterparty, sensitive_data, enforcement_boundary), evidence context (evidence_state, closing_evidence_observable, required_evidence_observed, evidence[] <=40), actual_arguments, authorization_ceiling, authority_expires_at and previous_trust_receipts[] <=20.
+  - name: TrustDecision
+    schema: null (response described in prose — "Trust decision + Trust Receipt")
+    domain: preflight
+    description: The 200 body of POST /v1/trust — a wire decision (ALLOW, VERIFY, REQUIRE_VERIFICATION, DENY), payment_required flag and an embedded Trust Receipt.
+  - name: TrustReceipt
+    schema: null (v1.3 contract in trust-boundary.json)
+    domain: preflight
+    description: Portable authorization artifact, version 1.3, covering (when available) identity, intent, scope, authority, evidence, risk, decision and verified_effect; free-preflight receipts carry execution_authority=false.
+  - name: VerifiedEffect
+    schema: null (glossary + sandbox contract)
+    domain: effect
+    description: The record of what actually happened after execution — effect state (e.g. COMMITTED) and the evidence used to compare observed effect with approved intent; the sandbox's execute step returns one and denies replays.
+  - name: RescueRequest
+    schema: inline on POST /v1/rescue
+    domain: preflight
+    description: caller_ref, action_ref, objective, uncertainty (required), optional action, capability, trigger (8-value enum), evidence_refs[] <=40, consequential/external/irreversible/binding flags.
+  - name: Monitor
+    schema: null (developer.json continuous_trust_monitoring)
+    domain: monitoring
+    description: Continuous Trust Monitoring created from a prior Trust Receipt; watch dimensions evidence, authority, counterparty, policy, execution; states ACTIVE, REQUIRE_VERIFICATION, BLOCKED, CLOSED; an ACTIVE monitor that misses next_check_at becomes REQUIRE_VERIFICATION. Created with a one-time bearer monitor token.
+  - name: PaymentRail
+    schema: null (payment-rails.json capabilities[])
+    domain: payments
+    description: A settlement or authorization capability (x402, mpp, stablecoin-multinetwork, ap2, streaming-micropayments, tokenized-deposit) with status, modes and live_paths (asset, asset_address, network, protocol, settlement_status).
+  - name: PaymentPlanSelection
+    schema: inline on POST /v1/payments/select
+    domain: payments
+    description: rail, authorization_protocol (muj428-trust-receipt | ap2), base_rail, asset, network — a planning-only eligibility check.
+  - name: Service
+    schema: null (/services and /pricing.json bodies)
+    domain: catalog
+    description: A priced MUJ428 service — id, name, endpoint, x402_endpoint, price_usdc / amount_atomic or fee tiers, payment terms.
+  - name: CompatibilityAdvertisement
+    schema: null (trust-gravity.json + /v1/compatibility)
+    domain: directory
+    description: A receipt-aware integration's self-attested advertisement (integration_id, operator_domain, protocols, receipt_versions, capabilities, advertisement_hash); observations reference it by advertisement_hash.
+  - name: TrustRequest
+    schema: inline on MCP publish_trust_request
+    domain: directory
+    description: requester_ref, description (required), optional action, capability, protocols[], requirements — a published request matched against the compatibility directory.
+  - name: Heartbeat
+    schema: null (/v1/heartbeat body)
+    domain: operations
+    description: policy_epoch, trust_receipt {current_version, accepted_versions}, revocations {status, feed}, component endpoints, issued_at / expires_at (5 minutes), poll_after_seconds.
+
+relationships:
+  - {from: TrustAction, to: TrustDecision, type: has_one, via: response of POST /v1/trust}
+  - {from: TrustDecision, to: TrustReceipt, type: has_one, via: embedded receipt (Trust Receipt v1.3)}
+  - {from: TrustAction, to: TrustReceipt, type: has_many, via: 'previous_trust_receipts[] (prior receipts supplied as trajectory context)'}
+  - {from: TrustReceipt, to: VerifiedEffect, type: has_one, via: receipt consumed at the executor's mutation boundary produces the effect record}
+  - {from: Monitor, to: TrustReceipt, type: belongs_to, via: source receipt supplied to POST /v1/monitor (409 if a monitor already exists for it)}
+  - {from: TrustAction, to: PaymentPlanSelection, type: has_one, via: optional rail preflight before Trust Reflex (POST /v1/payments/select)}
+  - {from: PaymentPlanSelection, to: PaymentRail, type: belongs_to, via: rail}
+  - {from: Service, to: PaymentRail, type: belongs_to, via: payment / x402_endpoint (default settlement rail x402)}
+  - {from: RescueRequest, to: TrustAction, type: has_one, via: the rescue response returns the exact independent preflight route to POST /v1/trust}
+  - {from: TrustRequest, to: CompatibilityAdvertisement, type: has_many, via: compatibility matches returned on publish}
+  - {from: CompatibilityAdvertisement, to: Heartbeat, type: belongs_to, via: policy_epoch and receipt_versions must match the heartbeat's accepted values}
+
+identifiers:
+  caller_ref: caller-chosen stable agent id, >=3 chars (160 max on rescue); free-quota accounting key
+  action_ref: caller-chosen stable action id, >=3 chars; replay key on Trust Reflex
+  requester_ref / observer_ref: caller-chosen directory actor ids
+  advertisement_hash: hash of a compatibility advertisement, used by observe_trust_compatibility
+  network: CAIP-2 chain id, eip155:8453 (Base mainnet); asset USDC at 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913

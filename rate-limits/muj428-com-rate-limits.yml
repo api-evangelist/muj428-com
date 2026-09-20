@@ -1,0 +1,45 @@
+generated: '2026-09-19'
+method: searched
+source: https://agents.muj428.com/openapi.json
+docs:
+- https://agents.muj428.com/developer.json
+- https://agents.muj428.com/index.md
+- https://agents.muj428.com/pricing.json
+limit_count: 1
+summary: >-
+  MUJ428 publishes ONE quantified limit — the free Trust Reflex allocation of 1,000 qualifying decisions per stable
+  caller_ref — and one unquantified one: POST /v1/rescue declares a 429 "Rate limited" response with no number,
+  window or Retry-After. No requests-per-second ceiling is documented for any operation, no X-RateLimit-* /
+  RateLimit-* headers are declared in the spec or were observed on live responses (headers seen: Supabase gateway
+  metrics endpoint-load-metrics, sb-request-id, cf-ray; nothing rate-shaped). The runtime signal for the one real
+  quota is economic rather than a header: the Trust Reflex 200 body carries payment_required=false while quota
+  remains, and the same request returns HTTP 402 with a PAYMENT-REQUIRED header once it is exhausted.
+rate_limits:
+- name: Free Trust Reflex decisions per caller_ref
+  scope: per-caller_ref (caller-chosen stable agent id)
+  limit: 1000
+  window: lifetime of the caller_ref (launch allocation; no reset period stated)
+  metric: qualifying decision (unique caller_ref + action_ref; replays do not count)
+  burst: null
+  applies_to: ['POST /v1/trust (trustAction)', 'MCP tool trust_action', 'A2A skill trust-action']
+  exhaustion_status: 402
+  exhaustion_headers: [PAYMENT-REQUIRED]
+  after_exhaustion: 0.01 USDC per decision via x402, only after explicit caller authorization; no automatic continuation
+  source: 'OpenAPI /v1/trust description ("First 1,000 qualifying decisions per caller_ref are free. After quota, an unpaid request receives HTTP 402"); developer.json first_qualifying_decisions_free 1000, replay_same_caller_action_consumes_quota false'
+undocumented:
+- name: Rescue Beacon rate limit
+  scope: unknown
+  limit: null
+  window: null
+  applies_to: ['POST /v1/rescue (rescueAgentBeforeConsequence)', 'MCP tool rescue_agent_before_consequence']
+  exhaustion_status: 429
+  exhaustion_headers: []
+  note: The only 429 declared in the spec; no number, window or Retry-After is published anywhere.
+headers:
+  request_id: X-Request-Id (exposed; sb-request-id also present on every response)
+  rate_limit: none documented
+  retry_after: none documented
+  policy_epoch: X-MUJ428-Policy-Epoch (exposed; heartbeat policy_epoch 2026-08-30.1)
+response_codes:
+  quota_exhausted: 402
+  throttled: 429
