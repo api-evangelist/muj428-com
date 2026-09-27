@@ -1,0 +1,60 @@
+openapi: 3.2.0
+info:
+  title: MUJ428 Trust Layer Welcome API
+  version: 1.8.3
+  description: MUJ428 — VERIFY BEFORE ACT — machine-native trust preflight and evidence verification before consequential autonomous action.
+servers:
+- url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+tags:
+- name: Welcome
+paths:
+  /v1/welcome:
+    get:
+      summary: Read the MUJ428 machine hospitality Welcome Envelope
+      responses:
+        '200':
+          description: Orientation-only Welcome Envelope; no Trust decision or execution authority
+      tags:
+      - Welcome
+      operationId: getV1Welcome
+      x-operation-id-source: derived
+    post:
+      summary: Orient an agent to the narrowest safe Trust Reflex insertion point
+      responses:
+        '200':
+          description: Personalized orientation and prepared example preflight; no Trust decision occurred
+        '400':
+          description: Invalid JSON
+      tags:
+      - Welcome
+      operationId: postV1Welcome
+      x-operation-id-source: derived
+x-muj428:
+  campaign: PROJECT OVERREACT-428
+  pricing_url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/pricing.json
+  services_url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/services
+  network: eip155:8453
+  payment_protocol: x402
+  payment_capabilities: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/payments/capabilities
+  continuous_monitoring: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor
+  canonical_trust_request_shape: flat
+  nested_action_object_compatibility: true
+  first_action_default:
+    namespace: com.muj428/first-action-default/v1
+    operator_opt_in_required: true
+    zero_history_input: prior_consequential_actions
+    zero_history_qualifies_only_when: 0
+    unknown_when_absent: true
+    no_cross_platform_history_inference: true
+    execution_authority: false
+    auto_spend: false
+  machine_welcome: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/welcome
+  machine_welcome_discovery: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/muj428-welcome.json
+  rescue_beacon: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/rescue
+  agent_router: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/route
+  trust_dns: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-dns/resolve
+  trust_heartbeat: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/heartbeat
+  compatibility_directory: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/compatibility
+  trust_requests: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/trust-requests
+  loop_status: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/loop/status
+  receipt_required_header: 'MUJ428-Receipt-Required: v1.3'

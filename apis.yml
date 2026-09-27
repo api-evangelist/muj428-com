@@ -1,5 +1,5 @@
 aid: muj428-com
-name: MUJ428 LLC
+name: MUJ428
 description: >-
   MUJ428 LLC operates the MUJ428 Trust Layer ("VERIFY BEFORE ACT"), a machine-native trust preflight
   service for autonomous agents: an agent POSTs the consequential action it is about to take (PAY, BUY,
@@ -28,9 +28,9 @@ tags:
 - MCP
 - x402
 - Payments
-- Risk
+- Risk Management
 - Verification
-- agent-native
+- Agent-Native
 tags_raw:
 - Agents
 - Agent trust
@@ -43,68 +43,28 @@ tags_raw:
 - Verification
 - Agent-native
 - Agent Commerce
+- agent-native
 apis:
-- aid: muj428-com:muj428-trust-layer-api
-  name: MUJ428 Trust Layer API
-  description: >-
-    REST facade for the MUJ428 Trust Layer, served as Supabase edge functions at
-    https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer and named as the canonical
-    production facade by the provider's own api-catalog, agent card, mcp.json, AGENTS.md and developer.json
-    on agents.muj428.com. POST /v1/trust is the Trust Reflex preflight (flat JSON: caller_ref, action_ref,
-    action) returning a decision and Trust Receipt v1.3; /v1/route resolves an intent into the supported
-    action vocabulary; /v1/rescue is the Agent Rescue Beacon; /v1/monitor creates Continuous Trust
-    Monitoring from a prior receipt; /v1/evidence-signal, /v1/reputation-check, /v1/milestone-attestation,
-    /v1/trust-layer-report and /v1/transaction-assurance are x402-paid (HTTP 402 with PAYMENT-REQUIRED,
-    retry with PAYMENT-SIGNATURE); /discover, /services, /pricing.json, /health, /v1/heartbeat,
-    /v1/compatibility, /v1/trust-requests, /v1/loop/status and the payment-rail documents are anonymous
-    reads. OpenAPI 3.1.0, 24 operations, no securitySchemes (free calls need no credential).
-  humanURL: https://agents.muj428.com/
-  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
-  tags:
-  - Agent Trust
-  - Agentic Commerce
-  - x402
-  - Verification
-  - Risk
-  tags_raw:
-  - Agent Trust
-  - Agent Commerce
-  - x402
-  - Verification
-  - Risk
-  properties:
-  - type: OpenAPI
-    url: openapi/muj428-com-trust-layer-openapi.json
-  - type: OpenAPI
-    name: MUJ428 Trust Layer API OpenAPI (provider-hosted static mirror, v1.8.2)
-    url: https://agents.muj428.com/openapi.json
-  - type: OpenAPI
-    name: MUJ428 Trust Layer API OpenAPI (canonical facade, v1.8.3)
-    url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json
-  - type: Documentation
-    url: https://agents.muj428.com/AGENTS.md
-  - type: APIReference
-    url: https://agents.muj428.com/developer.json
-  - type: Overlay
-    url: overlays/muj428-com-trust-layer-overlay.yaml
 - aid: muj428-com:muj428-trust-layer-mcp-server
   name: MUJ428 Trust Layer MCP Server
   description: >-
-    Remote Model Context Protocol server, Streamable HTTP, POST only, at
-    https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp (protocol version 2025-06-18,
-    serverInfo "MUJ428 Trust Layer — VERIFY BEFORE ACT" 1.8.3). initialize and tools/list answer
-    anonymously with 14 tools carrying real JSON Schema 2020-12 inputSchemas: trust_action,
-    rescue_agent_before_consequence, invoke_trust_service, get_service_catalog, get_payment_rails,
-    resolve_trust_route, get_trust_heartbeat, find_trust_capabilities, publish_trust_request,
-    observe_trust_compatibility, select_payment_rail, get_trust_layer_pricing, select_assurance_tier and
-    get_capabilities; resources/list and prompts/list return -32601. A second, older compatibility facade
-    answers at https://agents.muj428.com/mcp (serverInfo 1.7.1, two tools) and is the remote the official
-    MCP registry entry io.github.wmujahid428-web/muj428-trust-layer lists; the provider's own server card
-    marks it canonical: false. Discovery documents: /.well-known/mcp.json (server.json shape) and
-    /mcp/server-card (application/mcp-server-card+json) on agents.muj428.com.
+    Remote Model Context Protocol server, Streamable HTTP, POST only, at https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp
+    (protocol version 2025-06-18, serverInfo "MUJ428 Trust Layer — VERIFY BEFORE ACT" 1.8.3). initialize
+    and tools/list answer anonymously with 14 tools carrying real JSON Schema 2020-12 inputSchemas: trust_action,
+    rescue_agent_before_consequence, invoke_trust_service, get_service_catalog, get_payment_rails, resolve_trust_route,
+    get_trust_heartbeat, find_trust_capabilities, publish_trust_request, observe_trust_compatibility,
+    select_payment_rail, get_trust_layer_pricing, select_assurance_tier and get_capabilities; resources/list
+    and prompts/list return -32601. A second, older compatibility facade answers at https://agents.muj428.com/mcp
+    (serverInfo 1.7.1, two tools) and is the remote the official MCP registry entry io.github.wmujahid428-web/muj428-trust-layer
+    lists; the provider's own server card marks it canonical: false. Discovery documents: /.well-known/mcp.json
+    (server.json shape) and /mcp/server-card (application/mcp-server-card+json) on agents.muj428.com.
   humanURL: https://agents.muj428.com/.well-known/mcp.json
   baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer-mcp
   tags:
+  - MCP
+  - Agent-Native
+  - Agent Trust
+  tags_raw:
   - MCP
   - agent-native
   - Agent Trust
@@ -125,19 +85,22 @@ apis:
   name: MUJ428 Trust Reflex A2A Agent
   description: >-
     Agent2Agent surface: an agent card served from https://agents.muj428.com/.well-known/agent-card.json
-    (name "MUJ428 Trust Reflex", version 1.8.3, provider MUJ428 LLC) declaring eleven skills — agent
-    rescue beacon, trust reflex, evidence signal, reputation check, milestone attestation, trust report,
-    transaction assurance, payment-plan discovery, agent router, heartbeat and trust requests — and two
-    capability extensions (the MUJ428 Trust Kernel v1.0 and the Trust Reflex extension at
-    https://agents.muj428.com/extensions/trust-reflex/v1, which adds a trust/evaluate JSON-RPC method
-    activated with the A2A-Extensions header). supportedInterfaces names a JSONRPC binding at
-    https://agents.muj428.com/a2a, which answers JSON-RPC 2.0 (an un-activated request returns -32600
-    asking for the extension header). The card omits protocolVersion and a top-level url, so it grades
-    flavored against A2A 1.0.0. A canonical production copy with per-skill endpoints is also served at
-    https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json.
+    (name "MUJ428 Trust Reflex", version 1.8.3, provider MUJ428 LLC) declaring eleven skills — agent rescue
+    beacon, trust reflex, evidence signal, reputation check, milestone attestation, trust report, transaction
+    assurance, payment-plan discovery, agent router, heartbeat and trust requests — and two capability
+    extensions (the MUJ428 Trust Kernel v1.0 and the Trust Reflex extension at https://agents.muj428.com/extensions/trust-reflex/v1,
+    which adds a trust/evaluate JSON-RPC method activated with the A2A-Extensions header). supportedInterfaces
+    names a JSONRPC binding at https://agents.muj428.com/a2a, which answers JSON-RPC 2.0 (an un-activated
+    request returns -32600 asking for the extension header). The card omits protocolVersion and a top-level
+    url, so it grades flavored against A2A 1.0.0. A canonical production copy with per-skill endpoints
+    is also served at https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json.
   humanURL: https://agents.muj428.com/
   baseURL: https://agents.muj428.com/a2a
   tags:
+  - A2A
+  - Agent-Native
+  - Agent Trust
+  tags_raw:
   - A2A
   - agent-native
   - Agent Trust
@@ -149,13 +112,310 @@ apis:
     url: https://agents.muj428.com/.well-known/agent-card.json
   - type: AgentCard
     name: A2A Agent Card (canonical production facade)
-    url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json
+    url: >-
+      https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/.well-known/agent-card.json
+- aid: muj428-com:muj428-com-compatibility-api
+  name: MUJ428 Compatibility API
+  description: The Compatibility API from MUJ428 — 2 operation(s) for compatibility.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Compatibility
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-compatibility-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-discover-api
+  name: MUJ428 Discover API
+  description: The Discover API from MUJ428 — 1 operation(s) for discover.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Discover
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-discover-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-evidence-signal-api
+  name: MUJ428 Evidence Signal API
+  description: The Evidence Signal API from MUJ428 — 1 operation(s) for evidence signal.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Evidence Signal
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-evidence-signal-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-health-api
+  name: MUJ428 Health API
+  description: The Health API from MUJ428 — 1 operation(s) for health.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-health-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-heartbeat-api
+  name: MUJ428 Heartbeat API
+  description: The Heartbeat API from MUJ428 — 1 operation(s) for heartbeat.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Heartbeat
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-heartbeat-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-loop-api
+  name: MUJ428 Loop API
+  description: The Loop API from MUJ428 — 1 operation(s) for loop.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Loop
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-loop-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-milestone-attestation-api
+  name: MUJ428 Milestone Attestation API
+  description: The Milestone Attestation API from MUJ428 — 1 operation(s) for milestone attestation.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Milestone Attestation
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-milestone-attestation-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-monitor-api
+  name: MUJ428 Monitor API
+  description: The Monitor API from MUJ428 — 1 operation(s) for monitor.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Monitor
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-monitor-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-payments-api
+  name: MUJ428 Payments API
+  description: The Payments API from MUJ428 — 2 operation(s) for payments.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-payments-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-pricing-json-api
+  name: MUJ428 Pricing.json API
+  description: The Pricing.json API from MUJ428 — 1 operation(s) for pricing.json.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Pricing.json
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-pricing-json-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-reputation-check-api
+  name: MUJ428 Reputation Check API
+  description: The Reputation Check API from MUJ428 — 1 operation(s) for reputation check.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Reputation Check
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-reputation-check-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-rescue-api
+  name: MUJ428 Rescue API
+  description: The Rescue API from MUJ428 — 1 operation(s) for rescue.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Rescue
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-rescue-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-route-api
+  name: MUJ428 Route API
+  description: The Route API from MUJ428 — 1 operation(s) for route.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Route
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-route-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-services-api
+  name: MUJ428 Services API
+  description: The Services API from MUJ428 — 1 operation(s) for services.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Services
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-services-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-transaction-assurance-api
+  name: MUJ428 Transaction Assurance API
+  description: The Transaction Assurance API from MUJ428 — 1 operation(s) for transaction assurance.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Transaction Assurance
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-transaction-assurance-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-trust-api
+  name: MUJ428 Trust API
+  description: The Trust API from MUJ428 — 1 operation(s) for trust.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Trust
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-trust-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-trust-dns-api
+  name: MUJ428 Trust Dns API
+  description: The Trust Dns API from MUJ428 — 1 operation(s) for trust dns.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Trust Dns
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-trust-dns-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-trust-layer-report-api
+  name: MUJ428 Trust Layer Report API
+  description: The Trust Layer Report API from MUJ428 — 1 operation(s) for trust layer report.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Trust Layer Report
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-trust-layer-report-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-trust-requests-api
+  name: MUJ428 Trust Requests API
+  description: The Trust Requests API from MUJ428 — 1 operation(s) for trust requests.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Trust Requests
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-trust-requests-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-welcome-api
+  name: MUJ428 Welcome API
+  description: The Welcome API from MUJ428 — 1 operation(s) for welcome.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - Welcome
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-welcome-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
+- aid: muj428-com:muj428-com-well-known-api
+  name: MUJ428 .well Known API
+  description: The .well Known API from MUJ428 — 2 operation(s) for .well known.
+  humanURL: https://agents.muj428.com/
+  baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/muj428-com-well-known-api-openapi.yml
+  - type: Documentation
+    url: https://agents.muj428.com/AGENTS.md
+  - type: APIReference
+    url: https://agents.muj428.com/developer.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/muj428-com-trust-layer-overlay.yaml
 - type: DomainSecurity
   url: security/muj428-com-domain-security.yml
 - type: AgenticAccess
@@ -221,3 +481,11 @@ x-enrichment:
   status: enriched
   artifacts_added: 49
   pass: local-v3
+x-legal-name: MUJ428 LLC
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://agents.muj428.com/.well-known/agent-card.json"
+  grade: "flavored"
+  protocol_version: "1.0"
+  control: 404
