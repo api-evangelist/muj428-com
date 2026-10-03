@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Muj428 Com Services API
+  title: MUJ428 Trust Layer Services API
   version: 1.8.2
-  description: 'Operations tagged Services across 2 of this provider''s published API definitions: muj428-com-trust-layer-openapi-agents-mirror.json, muj428-com-trust-layer-openapi.json. Each path carries the servers of the definition it was published in.'
+  description: MUJ428 — VERIFY BEFORE ACT. Machine-native Trust Reflex preflight, Trust Kernel v1.0 discovery, read-only payment-plan discovery, and x402-paid evidence, reputation, milestone, report, and transaction-assurance services.
 servers:
 - url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
 tags:
@@ -17,11 +17,6 @@ paths:
           description: Canonical machine-readable catalog
       tags:
       - Services
-    servers:
-    - url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
-x-refined-from:
-- muj428-com-trust-layer-openapi-agents-mirror.json
-- muj428-com-trust-layer-openapi.json
 x-muj428:
   campaign: PROJECT OVERREACT-428
   canonical_facade: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer

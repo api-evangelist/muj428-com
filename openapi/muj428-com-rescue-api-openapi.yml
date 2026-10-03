@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Muj428 Com Rescue API
   version: '1.0'
-  description: 'Operations tagged Rescue across 3 of this provider''s published API definitions: muj428-com-trust-layer-openapi-agents-mirror.json, muj428-com-trust-layer-openapi-facade.json, muj428-com-trust-layer-openapi.json. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Rescue across 2 of this provider''s published API definitions: muj428-com-trust-layer-openapi-agents-mirror.json, muj428-com-trust-layer-openapi-facade.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
 tags:
@@ -84,7 +84,6 @@ paths:
 x-refined-from:
 - muj428-com-trust-layer-openapi-agents-mirror.json
 - muj428-com-trust-layer-openapi-facade.json
-- muj428-com-trust-layer-openapi.json
 x-muj428:
   campaign: PROJECT OVERREACT-428
   canonical_facade: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
