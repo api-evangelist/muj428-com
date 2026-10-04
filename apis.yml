@@ -218,6 +218,8 @@ apis:
   humanURL: https://agents.muj428.com/
   baseURL: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer
   tags:
+  - Monitors
+  tags_raw:
   - Monitor
   properties:
   - type: OpenAPI
