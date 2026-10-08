@@ -78,3 +78,61 @@ plans:
   endpoint: https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/v1/monitor
   status: EXPANSION_BETA_LIVE
 contact: sales@muj428.com (from /.well-known/x402)
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - metered
+  - subscription
+  units: []
+  plans:
+  - name: Trust Reflex (preflight)
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods:
+    - other
+  - name: Evidence Signal
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - other
+  - name: Agent Reputation Check
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - other
+  - name: Milestone Evidence Attestation
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - other
+  - name: Trust Layer Report
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - other
+  - name: Transaction Assurance
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - per-use
+  - name: Continuous Trust Monitoring
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - other
