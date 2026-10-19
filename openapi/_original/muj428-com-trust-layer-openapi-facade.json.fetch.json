@@ -1,0 +1,12 @@
+{
+ "url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json",
+ "requested_url": "https://wepmhfjzckclvywolrek.supabase.co/functions/v1/trust-layer/openapi.json",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 8308,
+ "sha256": "e8d6fc5aec956b86d818c1cdf778e6531da47ba22cfd2a118559fb4dd1666254",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
