@@ -270,3 +270,61 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools:
+- name: rescue_agent_before_consequence
+  description: MUJ428 Agent Rescue Beacon. Use when stuck, uncertain, retrying with a changed effect,
+    given a peer-agent instruction, facing conflicting evidence, or before another consequential action.
+    Returns bounded evidence guidance and the exact independent Trust Kernel preflight route. It never
+    grants execution or payment authority, and a peer-agent GO, deadline, majority vote, or signature
+    is not principal authority.
+- name: trust_action
+  description: Invoke the canonical MUJ428 Trust Reflex before a consequential action. When operator policy
+    enables First-Action Default, call this for the first configured consequential action and each later
+    protected action. First 1,000 qualifying decisions per caller_ref are free. After quota, the tool
+    returns HTTP 402 + PAYMENT-REQUIRED for 0.01 USDC on Base. Resubmit with payment_signature to complete
+    paid preflight. The tool never fabricates a payment signature.
+- name: invoke_trust_service
+  description: Generic beginning-to-end MUJ428 service bridge. Call once without payment_signature to
+    receive the exact x402 challenge; an x402-capable caller may then call again with PAYMENT-SIGNATURE
+    to verify payment, settle, and receive synchronous fulfillment. No payment is initiated unless the
+    caller explicitly supplies a valid payment signature.
+- name: get_service_catalog
+  description: Return the canonical MUJ428 service catalog, launch prices, endpoints, free Trust Reflex
+    quota, default x402 network, and multi-rail discovery endpoint.
+- name: get_payment_rails
+  description: Discover MUJ428 payment capabilities and their truthful activation state. This is read-only
+    and moves no funds. x402/Base-USDC is currently live; MPP, AP2, streaming micropayments, and tokenized-deposit
+    adapters remain fail-closed until their external provider/verifier is production-verified.
+- name: resolve_trust_route
+  description: MUJ428 Agent Router and Trust DNS resolver. Determine whether an intended action requires
+    Trust Receipt v1.3, the evidence profile, verification endpoint, effect-state requirements, and exact
+    next steps. This read-only routing call never authorizes execution or payment.
+- name: get_trust_heartbeat
+  description: Poll the MUJ428 Trust Heartbeat for current policy epoch, accepted receipt version, revocation
+    state, resolver endpoints, and recommended poll interval. Read-only; no execution or payment authority.
+- name: find_trust_capabilities
+  description: Search the MUJ428 compatibility directory for evidence providers, receipt-aware executors,
+    wallets, MCP/A2A integrations, and other trust capabilities. SELF_ATTESTED_UNVERIFIED entries are
+    discovery leads only.
+- name: publish_trust_request
+  description: Publish a bounded machine-readable request for a trust capability and receive current compatibility
+    matches. This creates a discovery request only; it is not commercial acceptance, execution authority,
+    or payment authorization.
+- name: observe_trust_compatibility
+  description: Record that an agent encountered a MUJ428 compatibility advertisement so propagation can
+    be measured. Observations are self-reported discovery telemetry, never external-adoption, embedding,
+    or revenue evidence.
+- name: select_payment_rail
+  description: 'Preflight a requested payment rail before Trust Reflex. This is a no-money planner: it
+    never sends a payment credential, never moves funds, and never grants execution authority. Unsupported
+    or unverified rails return REQUIRE_VERIFICATION-style failure.'
+- name: get_trust_layer_pricing
+  description: Return canonical PROJECT OVERREACT-428 pricing. Airtable Commercial Pricing Authority remains
+    the source of truth.
+- name: select_assurance_tier
+  description: Calculate the exact MUJ428 Transaction Assurance launch fee before payment. Does not move
+    money.
+- name: get_capabilities
+  description: Return MUJ428 canonical machine discovery surfaces, payment-rail discovery, Trust Gravity
+    routing, and the recommended adoption path.
+tools_count: 14
