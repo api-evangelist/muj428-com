@@ -110,3 +110,9 @@ x-muj428:
     execution_authority: false
     moves_money: false
     auto_spend: false
+x-provenance:
+  method: harvested
+  publisher: MUJ428
+  source: https://agents.muj428.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
